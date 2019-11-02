@@ -46,7 +46,7 @@ public class LevelCreatorScript:MonoBehaviour{
     	GameObject child_obj = null;
         foreach(Transform child in level_obj.transform){
     		if(child.gameObject.name != "enemies" && child.gameObject.name != "player_spawn" && child.gameObject.name != "items"){
-    			child_obj = (GameObject)Instantiate(child.gameObject, new Vector3(0.0f,0.0f,(float)(where_cs1*20)) + child.localPosition, child.localRotation);
+    			child_obj = (GameObject)Instantiate(child.gameObject, world_offset + child.localPosition, child.localRotation);
     			child_obj.transform.parent = level.transform;
     		}
     	}
@@ -56,10 +56,10 @@ public class LevelCreatorScript:MonoBehaviour{
     			if(UnityEngine.Random.Range(0.0f,1.0f) <= challenge){
                      GameObject go = null;
                      if(child.gameObject.name == "flying_shock_drone_spawn"){
-                        go = (GameObject)Instantiate( drone,  new Vector3(0.0f,0.0f,(float)(where_cs1*20)) + child.localPosition + enemies.localPosition, child.localRotation );
+                        go = (GameObject)Instantiate( drone, world_offset + child.localPosition + enemies.localPosition, child.localRotation );
                         go.transform.parent = level_enemies.transform;
                      } else if(child.gameObject.name == "stationary_turret_fixed_spawn"){
-                        go = (GameObject)Instantiate( turret,  new Vector3(0.0f,0.0f,(float)(where_cs1*20)) + child.localPosition + enemies.localPosition, child.localRotation );
+                        go = (GameObject)Instantiate( turret, world_offset + child.localPosition + enemies.localPosition, child.localRotation );
                         go.transform.parent = level_enemies.transform;
                      }
     			}
@@ -69,7 +69,7 @@ public class LevelCreatorScript:MonoBehaviour{
     	if(items != null){
     		foreach(Transform child in items){
     			if(UnityEngine.Random.Range(0.0f,1.0f) <= (player?challenge+0.3f:challenge)){
-    				child_obj = (GameObject)Instantiate(child.gameObject, new Vector3(0.0f,0.0f,(float)(where_cs1*20)) + child.localPosition + items.localPosition, items.localRotation);
+    				child_obj = (GameObject)Instantiate(child.gameObject, world_offset + child.localPosition + items.localPosition, items.localRotation);
     				child_obj.transform.parent = level_items.transform;
     			}
     		}
@@ -85,7 +85,7 @@ public class LevelCreatorScript:MonoBehaviour{
     			int j=0;
     			foreach(Transform child in players){
     				if(j == save){
-    					child_obj = (GameObject)Instantiate(player_obj, new Vector3(0.0f,0.0f,(float)(where_cs1*20)) + child.localPosition + players.localPosition, child.localRotation);
+    					child_obj = (GameObject)Instantiate(player_obj, world_offset + child.localPosition + players.localPosition, child.localRotation);
     					child_obj.transform.parent = this.gameObject.transform;
     					child_obj.name = "Player";
 
