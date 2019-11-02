@@ -24,6 +24,7 @@ public class LevelCreatorScript:MonoBehaviour{
     public GameObject turret;
     public GameObject drone;
     public GameObject player_obj;
+    public GameObject sound_event_obj;
     Transform player_inventory_transform;
     
     public void SpawnTile(int where_cs1,float challenge,bool player){
@@ -32,9 +33,15 @@ public class LevelCreatorScript:MonoBehaviour{
         GameObject level_enemies = new GameObject("enemies");
         GameObject level_items = new GameObject("items");
         GameObject level_decals = new GameObject("decals");
+        Vector3 world_offset = new Vector3(0f, 0f, where_cs1 * 20f);
         level_enemies.transform.parent = level.transform;
         level_items.transform.parent = level.transform;
         level_decals.transform.parent = level.transform;
+
+        if(UnityEngine.Random.Range(0f, 1f) < .1f) {
+            Vector3 offset = new Vector3(UnityEngine.Random.Range(-10, 10), UnityEngine.Random.Range(0, 20), UnityEngine.Random.Range(-10, 10)); // Place it randomly inside the tile
+            Instantiate(sound_event_obj, world_offset + offset, Quaternion.identity, level.transform);
+        }
 
     	GameObject child_obj = null;
         foreach(Transform child in level_obj.transform){

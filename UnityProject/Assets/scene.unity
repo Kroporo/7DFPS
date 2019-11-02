@@ -512,6 +512,8 @@ MonoBehaviour:
   turret: {fileID: 100016, guid: d37ac9597e1adfd4cbbf352a23aa5afa, type: 3}
   drone: {fileID: 100008, guid: fc90c5a4b9b81664491435ff7495f9f2, type: 3}
   player_obj: {fileID: 100002, guid: 6b621344f5ad30248964c673fa94eb3c, type: 3}
+  sound_event_obj: {fileID: 4429375381777077699, guid: 5350816c84f55834d9504decdbe06d44,
+    type: 3}
 --- !u!1 &2106325456
 GameObject:
   m_ObjectHideFlags: 0
