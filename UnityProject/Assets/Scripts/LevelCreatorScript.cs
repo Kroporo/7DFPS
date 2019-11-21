@@ -25,7 +25,7 @@ public class LevelCreatorScript:MonoBehaviour{
     public GameObject drone;
     public GameObject player_obj;
     public int enemyCount = 16;
-    public int itemCount = 11;
+    public int itemCount = 12;
     Transform player_inventory_transform;
     
     public int Roll(int rollCount, int sideCount) {
@@ -41,7 +41,8 @@ public class LevelCreatorScript:MonoBehaviour{
         if(adjustedCount == 0) {
             return 0;
         }
-        return Mathf.Max(Roll(2, adjustedCount), Roll(2, adjustedCount));
+        return Mathf.Max(0, adjustedCount + Mathf.Min(Roll(2, 4), Roll(2, 4)) - 4);
+        //return Mathf.Max(Roll(2, adjustedCount), Roll(2, adjustedCount));
     }
 
     public int[] RandomIndices(int count, int max) {
