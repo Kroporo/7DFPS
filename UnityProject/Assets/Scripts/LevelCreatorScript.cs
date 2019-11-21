@@ -1,5 +1,5 @@
 using UnityEngine;
-using System;
+using System.Linq;
 using System.Collections.Generic;
 
 
@@ -24,10 +24,43 @@ public class LevelCreatorScript:MonoBehaviour{
     public GameObject turret;
     public GameObject drone;
     public GameObject player_obj;
+    public int enemyCount = 16;
+    public int itemCount = 11;
     Transform player_inventory_transform;
     
+    public int Roll(int rollCount, int sideCount) {
+        int value = 0;
+        for (int i = 0; i < rollCount; i++) {
+            value += Random.Range(0, sideCount);
+        }
+        return value;
+    }
+
+    public int GetSpawnCount(int desired, float challenge) {
+        int adjustedCount = (int)Mathf.Round(desired * challenge);
+        if(adjustedCount == 0) {
+            return 0;
+        }
+        return Mathf.Max(Roll(2, adjustedCount), Roll(2, adjustedCount));
+    }
+
+    public int[] RandomIndices(int count, int max) {
+        List<int> outputList = Enumerable.Range(0, max).ToList();
+
+        if(count > max) {
+            return outputList.ToArray();
+        }
+
+        int removeCount = max - count;
+        for (int i = 0; i < removeCount; i++) {
+            outputList.RemoveAt(Random.Range(0, outputList.Count));
+        }
+        return outputList.ToArray();
+    }
+
     public void SpawnTile(int where_cs1,float challenge,bool player){
     	GameObject level_obj = level_tiles[UnityEngine.Random.Range(0,level_tiles.Length)];
+    	LevelScript levelScript = level_obj.GetComponent<LevelScript>();
     	GameObject level = new GameObject(where_cs1 + "_" + level_obj.name);
         GameObject level_enemies = new GameObject("enemies");
         GameObject level_items = new GameObject("items");
@@ -44,27 +77,27 @@ public class LevelCreatorScript:MonoBehaviour{
     		}
     	}
     	Transform enemies = level_obj.transform.Find("enemies");
-    	if(enemies != null){
-    		foreach(Transform child in enemies){
-    			if(UnityEngine.Random.Range(0.0f,1.0f) <= challenge){
-                     GameObject go = null;
-                     if(child.gameObject.name == "flying_shock_drone_spawn"){
-                        go = (GameObject)Instantiate( drone,  new Vector3(0.0f,0.0f,(float)(where_cs1*20)) + child.localPosition + enemies.localPosition, child.localRotation );
-                        go.transform.parent = level_enemies.transform;
-                     } else if(child.gameObject.name == "stationary_turret_fixed_spawn"){
-                        go = (GameObject)Instantiate( turret,  new Vector3(0.0f,0.0f,(float)(where_cs1*20)) + child.localPosition + enemies.localPosition, child.localRotation );
-                        go.transform.parent = level_enemies.transform;
-                     }
-    			}
-    		}
-    	}
+    	if(enemies != null) {
+            int countEnemies = GetSpawnCount(enemyCount, challenge * levelScript.enemySpawnMultiplier);
+            foreach (int index in RandomIndices(countEnemies, enemies.childCount)) {
+                Transform child = enemies.GetChild(index);
+                GameObject go = null;
+                if(child.gameObject.name == "flying_shock_drone_spawn"){
+                    go = (GameObject)Instantiate( drone,  new Vector3(0.0f,0.0f,(float)(where_cs1*20)) + child.localPosition + enemies.localPosition, child.localRotation );
+                    go.transform.parent = level_enemies.transform;
+                } else if(child.gameObject.name == "stationary_turret_fixed_spawn"){
+                    go = (GameObject)Instantiate( turret,  new Vector3(0.0f,0.0f,(float)(where_cs1*20)) + child.localPosition + enemies.localPosition, child.localRotation );
+                    go.transform.parent = level_enemies.transform;
+                }
+            }
+        }
     	Transform items = level_obj.transform.Find("items");
     	if(items != null){
-    		foreach(Transform child in items){
-    			if(UnityEngine.Random.Range(0.0f,1.0f) <= (player?challenge+0.3f:challenge)){
-    				child_obj = (GameObject)Instantiate(child.gameObject, new Vector3(0.0f,0.0f,(float)(where_cs1*20)) + child.localPosition + items.localPosition, items.localRotation);
-    				child_obj.transform.parent = level_items.transform;
-    			}
+            int countItems = GetSpawnCount(itemCount, challenge * levelScript.itemSpawnMultiplier);
+            foreach (int index in RandomIndices(countItems, items.childCount)) {
+                Transform child = items.GetChild(index);
+                child_obj = (GameObject)Instantiate(child.gameObject, new Vector3(0.0f,0.0f,(float)(where_cs1*20)) + child.localPosition + items.localPosition, items.localRotation);
+                child_obj.transform.parent = level_items.transform;
     		}
     	}
     	if(player){
@@ -216,7 +249,7 @@ public class LevelCreatorScript:MonoBehaviour{
     	int tile_x = (int)(main_camera.position.z / 20.0f + 0.5f);
 
         for(int i = tiles.Count-1; i >= 0; i--) {
-            int dist = Math.Abs(tile_x - tiles[i].tile_position);
+            int dist = Mathf.Abs(tile_x - tiles[i].tile_position);
             if(dist < 3) {
                 if(tiles[i].state == TileInstanceState.Disabled) {
                     EnableTile(tiles[i].tile_position);

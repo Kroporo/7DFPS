@@ -126,6 +126,9 @@ public class LevelScriptEditor : Editor {
 
 
 public class LevelScript : MonoBehaviour{
+    public float enemySpawnMultiplier = 1f;
+    public float itemSpawnMultiplier = 1f;
+
     public void Start() {
     	Transform enemies = transform.Find("enemies");
     	if(enemies != null){
@@ -158,9 +161,5 @@ public class LevelScript : MonoBehaviour{
     			}
     		}
     	}
-    }
-    
-    public void Update() {
-
     }
 }
