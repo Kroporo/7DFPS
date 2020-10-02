@@ -332,7 +332,6 @@ public class GunScript : MonoBehaviour {
     }
 
     public void InitInputs() {
-        print("setup");
         input.main.Hammer.canceled += ctx => ReleaseHammer();
 
         input.main.Trigger.canceled += ctx => ReleasePressureFromTrigger();
@@ -369,6 +368,10 @@ public class GunScript : MonoBehaviour {
 
         if(input.main.ExtractorRod.ReadValue<float>() > 0.5f)
             ExtractorRod();
+
+        int spin = System.Math.Sign(input.main.SpinCylinder.ReadValue<float>());
+        if(spin != 0)
+            RotateCylinder(spin);
     }
 
     public bool ResetRecoil() {

@@ -76,6 +76,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "SpinCylinder",
+                    "type": "Value",
+                    "id": "049796db-3e74-4709-8825-d24e1df81950",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -175,6 +183,17 @@
                     "processors": "",
                     "groups": "Mouse & Keyboard",
                     "action": "ExtractorRod",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "31f57787-46d6-4850-95cd-00ab7f327f8b",
+                    "path": "<Mouse>/scroll/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Mouse & Keyboard",
+                    "action": "SpinCylinder",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

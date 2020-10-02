@@ -89,6 +89,14 @@ public class @GunInputs : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""SpinCylinder"",
+                    ""type"": ""Value"",
+                    ""id"": ""049796db-3e74-4709-8825-d24e1df81950"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -190,6 +198,17 @@ public class @GunInputs : IInputActionCollection, IDisposable
                     ""action"": ""ExtractorRod"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""31f57787-46d6-4850-95cd-00ab7f327f8b"",
+                    ""path"": ""<Mouse>/scroll/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Mouse & Keyboard"",
+                    ""action"": ""SpinCylinder"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -224,6 +243,7 @@ public class @GunInputs : IInputActionCollection, IDisposable
         m_main_SwingOutCylinder = m_main.FindAction("SwingOutCylinder", throwIfNotFound: true);
         m_main_CloseCylinder = m_main.FindAction("CloseCylinder", throwIfNotFound: true);
         m_main_ExtractorRod = m_main.FindAction("ExtractorRod", throwIfNotFound: true);
+        m_main_SpinCylinder = m_main.FindAction("SpinCylinder", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -282,6 +302,7 @@ public class @GunInputs : IInputActionCollection, IDisposable
     private readonly InputAction m_main_SwingOutCylinder;
     private readonly InputAction m_main_CloseCylinder;
     private readonly InputAction m_main_ExtractorRod;
+    private readonly InputAction m_main_SpinCylinder;
     public struct MainActions
     {
         private @GunInputs m_Wrapper;
@@ -295,6 +316,7 @@ public class @GunInputs : IInputActionCollection, IDisposable
         public InputAction @SwingOutCylinder => m_Wrapper.m_main_SwingOutCylinder;
         public InputAction @CloseCylinder => m_Wrapper.m_main_CloseCylinder;
         public InputAction @ExtractorRod => m_Wrapper.m_main_ExtractorRod;
+        public InputAction @SpinCylinder => m_Wrapper.m_main_SpinCylinder;
         public InputActionMap Get() { return m_Wrapper.m_main; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -331,6 +353,9 @@ public class @GunInputs : IInputActionCollection, IDisposable
                 @ExtractorRod.started -= m_Wrapper.m_MainActionsCallbackInterface.OnExtractorRod;
                 @ExtractorRod.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnExtractorRod;
                 @ExtractorRod.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnExtractorRod;
+                @SpinCylinder.started -= m_Wrapper.m_MainActionsCallbackInterface.OnSpinCylinder;
+                @SpinCylinder.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnSpinCylinder;
+                @SpinCylinder.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnSpinCylinder;
             }
             m_Wrapper.m_MainActionsCallbackInterface = instance;
             if (instance != null)
@@ -362,6 +387,9 @@ public class @GunInputs : IInputActionCollection, IDisposable
                 @ExtractorRod.started += instance.OnExtractorRod;
                 @ExtractorRod.performed += instance.OnExtractorRod;
                 @ExtractorRod.canceled += instance.OnExtractorRod;
+                @SpinCylinder.started += instance.OnSpinCylinder;
+                @SpinCylinder.performed += instance.OnSpinCylinder;
+                @SpinCylinder.canceled += instance.OnSpinCylinder;
             }
         }
     }
@@ -386,5 +414,6 @@ public class @GunInputs : IInputActionCollection, IDisposable
         void OnSwingOutCylinder(InputAction.CallbackContext context);
         void OnCloseCylinder(InputAction.CallbackContext context);
         void OnExtractorRod(InputAction.CallbackContext context);
+        void OnSpinCylinder(InputAction.CallbackContext context);
     }
 }
