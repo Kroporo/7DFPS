@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.InputSystem;
 using System;
 using GunSystemInterfaces;
 
@@ -28,6 +29,7 @@ public class GunScript : MonoBehaviour {
     }
 
     public void OnEnable() {
+        input.Enable();
         gun_systems = GetGunSystems();
 
         // Init
@@ -36,6 +38,7 @@ public class GunScript : MonoBehaviour {
     }
 
     public void Update() {
+        UpdateInput();
         gun_systems.Update();
     }
 
@@ -320,6 +323,82 @@ public class GunScript : MonoBehaviour {
     public bool IsReadyToRemoveMagazine() {
         return Query(GunSystemQueries.IS_READY_TO_REMOVE_MAGAZINE);
     }
+
+	// Inputs
+	private GunInputs input;
+	public void Awake() {
+		input = new GunInputs();
+		InitInputs();
+	}
+
+	public void InitInputs() {
+		print("setup");
+		input.main.Hammer.canceled += ctx => ReleaseHammer();
+
+		input.main.Trigger.canceled += ctx => ReleasePressureFromTrigger();
+
+		input.main.SlideLock.started += ctx => ReleaseSlideLock();
+		input.main.SlideLock.canceled += ctx => ReleasePressureOnSlideLock();;
+
+		input.main.Safety.started += ctx => ToggleSafety();
+		input.main.Safety.started += ctx => print("toggle");
+		
+		input.main.FireSelector.started += ctx => ToggleAutoMod();
+
+		input.main.PullSlide.started += ctx => InputPullSlideBack();
+		input.main.PullSlide.canceled += ctx => ReleaseSlide();
+
+		input.main.SwingOutCylinder.started += ctx => SwingOutCylinder();
+
+        input.main.CloseCylinder.started += ctx => CloseCylinder();
+	}
+
+	public void OnDisable() {
+		input.Disable();
+	}
+
+	public void UpdateInput() {
+		if(input.main.Hammer.ReadValue<float>() > 0.5f)
+			PressureOnHammer();
+
+		if(input.main.Trigger.ReadValue<float>() > 0.5f)
+			ApplyPressureToTrigger();
+
+		if(input.main.SlideLock.ReadValue<float>() > 0.5f)
+			PressureOnSlideLock();
+
+		if(input.main.ExtractorRod.ReadValue<float>() > 0.5f)
+			ExtractorRod();
+/*
+    	if(input.main.GetAxis("Mouse ScrollWheel") != 0.0f){
+    		RotateCylinder((int)Input.GetAxis("Mouse ScrollWheel"));
+    	}*/
+	}
+	/*
+	public void OnFire(InputValue value) {
+		if(value.isPressed)
+			ApplyPressureToTrigger();
+		else
+			ReleasePressureFromTrigger();
+	}
+
+	public void OnHammer(InputValue value) {
+		return;
+		print(value.isPressed);
+		if(value.isPressed)
+			StartCoroutine(ContinuesInput(value, () => ApplyPressureToTrigger()));
+		else
+			ReleaseHammer();
+	}
+
+	private IEnumerator ContinuesInput(InputValue input, Action action) {
+		while (input.isPressed) {
+			print("pressuring");
+			action.Invoke();
+			yield return null;
+		}
+	}
+	 */
 
     public bool ResetRecoil() {
         return Request(GunSystemRequests.RESET_RECOIL);

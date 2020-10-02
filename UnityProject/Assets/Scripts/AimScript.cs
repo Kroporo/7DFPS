@@ -801,6 +801,7 @@ public class AimScript:MonoBehaviour{
     
     public void HandleGunControls(bool insert_mag_with_number_key) {
     	GunScript gun_script = GetGunScript();
+		/*
     	if(character_input.GetButton("Trigger")){
     		gun_script.ApplyPressureToTrigger();
     	} else {
@@ -853,6 +854,8 @@ public class AimScript:MonoBehaviour{
     	if(character_input.GetButton("Extractor Rod")){
     		gun_script.ExtractorRod();
     	}
+		 */
+		/*
     	if(character_input.GetButton("Hammer")){
     		gun_script.PressureOnHammer();
     	}
@@ -862,6 +865,7 @@ public class AimScript:MonoBehaviour{
     	if(character_input.GetButtonDown("Toggle Stance")){
     		gun_script.InputToggleStance();
     	}
+		*/
     	if(character_input.GetAxis("Mouse ScrollWheel") != 0.0f){
     		gun_script.RotateCylinder((int)Input.GetAxis("Mouse ScrollWheel"));
     	}		
