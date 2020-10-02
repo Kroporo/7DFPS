@@ -92,6 +92,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "BoltLock",
+                    "type": "Button",
+                    "id": "10830232-f342-42d3-a619-85c34e1f12cd",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -213,6 +221,17 @@
                     "processors": "",
                     "groups": "Mouse & Keyboard",
                     "action": "ToggleStance",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fada1905-fb25-40ef-92e3-0626bb8ae3d3",
+                    "path": "<Keyboard>/t",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Mouse & Keyboard",
+                    "action": "BoltLock",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -105,6 +105,14 @@ public class @GunInputs : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""BoltLock"",
+                    ""type"": ""Button"",
+                    ""id"": ""10830232-f342-42d3-a619-85c34e1f12cd"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -228,6 +236,17 @@ public class @GunInputs : IInputActionCollection, IDisposable
                     ""action"": ""ToggleStance"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fada1905-fb25-40ef-92e3-0626bb8ae3d3"",
+                    ""path"": ""<Keyboard>/t"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Mouse & Keyboard"",
+                    ""action"": ""BoltLock"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -264,6 +283,7 @@ public class @GunInputs : IInputActionCollection, IDisposable
         m_main_ExtractorRod = m_main.FindAction("ExtractorRod", throwIfNotFound: true);
         m_main_SpinCylinder = m_main.FindAction("SpinCylinder", throwIfNotFound: true);
         m_main_ToggleStance = m_main.FindAction("ToggleStance", throwIfNotFound: true);
+        m_main_BoltLock = m_main.FindAction("BoltLock", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -324,6 +344,7 @@ public class @GunInputs : IInputActionCollection, IDisposable
     private readonly InputAction m_main_ExtractorRod;
     private readonly InputAction m_main_SpinCylinder;
     private readonly InputAction m_main_ToggleStance;
+    private readonly InputAction m_main_BoltLock;
     public struct MainActions
     {
         private @GunInputs m_Wrapper;
@@ -339,6 +360,7 @@ public class @GunInputs : IInputActionCollection, IDisposable
         public InputAction @ExtractorRod => m_Wrapper.m_main_ExtractorRod;
         public InputAction @SpinCylinder => m_Wrapper.m_main_SpinCylinder;
         public InputAction @ToggleStance => m_Wrapper.m_main_ToggleStance;
+        public InputAction @BoltLock => m_Wrapper.m_main_BoltLock;
         public InputActionMap Get() { return m_Wrapper.m_main; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -381,6 +403,9 @@ public class @GunInputs : IInputActionCollection, IDisposable
                 @ToggleStance.started -= m_Wrapper.m_MainActionsCallbackInterface.OnToggleStance;
                 @ToggleStance.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnToggleStance;
                 @ToggleStance.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnToggleStance;
+                @BoltLock.started -= m_Wrapper.m_MainActionsCallbackInterface.OnBoltLock;
+                @BoltLock.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnBoltLock;
+                @BoltLock.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnBoltLock;
             }
             m_Wrapper.m_MainActionsCallbackInterface = instance;
             if (instance != null)
@@ -418,6 +443,9 @@ public class @GunInputs : IInputActionCollection, IDisposable
                 @ToggleStance.started += instance.OnToggleStance;
                 @ToggleStance.performed += instance.OnToggleStance;
                 @ToggleStance.canceled += instance.OnToggleStance;
+                @BoltLock.started += instance.OnBoltLock;
+                @BoltLock.performed += instance.OnBoltLock;
+                @BoltLock.canceled += instance.OnBoltLock;
             }
         }
     }
@@ -444,5 +472,6 @@ public class @GunInputs : IInputActionCollection, IDisposable
         void OnExtractorRod(InputAction.CallbackContext context);
         void OnSpinCylinder(InputAction.CallbackContext context);
         void OnToggleStance(InputAction.CallbackContext context);
+        void OnBoltLock(InputAction.CallbackContext context);
     }
 }

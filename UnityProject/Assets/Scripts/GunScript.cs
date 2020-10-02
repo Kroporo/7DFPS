@@ -352,6 +352,8 @@ public class GunScript : MonoBehaviour {
         input.main.CloseCylinder.started += ctx => CloseCylinder();
 
         input.main.ToggleStance.started += ctx => InputToggleStance();
+
+        input.main.BoltLock.started += ctx => ToggleBoltLock();
     }
 
     public void OnDisable() {
