@@ -811,14 +811,6 @@ public class AimScript:MonoBehaviour{
 				gun_script.InputPullSlideBack();
     		}
     	}
-
-		if(character_input.GetButtonDown("Pull Back Slide")){
-			if(gun_script.Query(GunSystemQueries.IS_WAITING_FOR_SLIDE_PUSH)) { // Slide input should push slide forward
-				gun_script.PushSlideForward();
-			} else {
-				gun_script.InputPullSlideBack();
-			}
-		}
 		*/
 
     	if(character_input.GetButtonDown("Insert")){

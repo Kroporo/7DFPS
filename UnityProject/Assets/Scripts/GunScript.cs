@@ -344,7 +344,13 @@ public class GunScript : MonoBehaviour {
         
         input.main.FireSelector.started += ctx => ToggleAutoMod();
 
-        input.main.PullSlide.started += ctx => InputPullSlideBack();
+        input.main.PullSlide.started += ctx => { // There must be a nicer way to do this
+            if (Query(GunSystemQueries.IS_WAITING_FOR_SLIDE_PUSH))
+                PushSlideForward();
+            else
+                InputPullSlideBack();
+        };
+
         input.main.PullSlide.canceled += ctx => ReleaseSlide();
 
         input.main.SwingOutCylinder.started += ctx => SwingOutCylinder();
