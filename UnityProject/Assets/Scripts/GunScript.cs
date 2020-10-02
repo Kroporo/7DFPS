@@ -350,6 +350,8 @@ public class GunScript : MonoBehaviour {
         input.main.SwingOutCylinder.started += ctx => SwingOutCylinder();
 
         input.main.CloseCylinder.started += ctx => CloseCylinder();
+
+        input.main.ToggleStance.started += ctx => InputToggleStance();
     }
 
     public void OnDisable() {

@@ -822,9 +822,6 @@ public class AimScript:MonoBehaviour{
     	if(character_input.GetButtonDown("Toggle Bolt Lock")) {
     		gun_script.ToggleBoltLock();
     	}
-    	if(character_input.GetButtonDown("Toggle Stance")){
-    		gun_script.InputToggleStance();
-    	}
 		*/
 
     	if(character_input.GetButtonDown("Insert")){

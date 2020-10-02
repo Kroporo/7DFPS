@@ -84,6 +84,14 @@
                     "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "ToggleStance",
+                    "type": "Button",
+                    "id": "6d35e334-2108-49d0-ab5a-8e16368a0655",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -194,6 +202,17 @@
                     "processors": "",
                     "groups": "Mouse & Keyboard",
                     "action": "SpinCylinder",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "de1ab855-ae98-4559-8fcd-8711f4ea7b70",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Mouse & Keyboard",
+                    "action": "ToggleStance",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
