@@ -338,7 +338,7 @@ public class GunScript : MonoBehaviour {
 
         input.main.SlideLock.started += ctx => ReleaseSlideLock();
         input.main.SlideLock.canceled += ctx => { // There must be a nicer way to do this
-            if(input.main.PullSlide.ReadValue<float>() > 0.5f)
+            if(IsPressed(input.main.PullSlide))
                 InputPullSlideBack();
             else
                 ReleasePressureOnSlideLock();
@@ -371,27 +371,28 @@ public class GunScript : MonoBehaviour {
     }
 
     public void UpdateInput() {
-        if(input.main.Hammer.ReadValue<float>() > 0.5f)
+        if(IsPressed(input.main.Hammer))
             PressureOnHammer();
 
-        if(input.main.Trigger.ReadValue<float>() > 0.5f)
+        if(IsPressed(input.main.Trigger))
             ApplyPressureToTrigger();
 
-        if(input.main.SlideLock.ReadValue<float>() > 0.5f)
+        if(IsPressed(input.main.SlideLock))
             PressureOnSlideLock();
 
-        if(input.main.ExtractorRod.ReadValue<float>() > 0.5f)
+        if(IsPressed(input.main.ExtractorRod))
             ExtractorRod();
 
-        if(input.main.PullSlide.ReadValue<float>() > 0.5f) {
-            if(input.main.SlideLock.ReadValue<float>() > 0.5f) {
-                Request(GunSystemRequests.INPUT_PULL_SLIDE_PRESS_CHECK);
-            }
-        }
+        if(IsPressed(input.main.PullSlide) && IsPressed(input.main.SlideLock))
+            Request(GunSystemRequests.INPUT_PULL_SLIDE_PRESS_CHECK);
 
         int spin = System.Math.Sign(input.main.SpinCylinder.ReadValue<float>());
         if(spin != 0)
             RotateCylinder(spin);
+    }
+
+    private bool IsPressed(InputAction action) {
+        return action.ReadValue<float>() > 0.5f;
     }
 
     public bool ResetRecoil() {
