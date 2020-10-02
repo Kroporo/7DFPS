@@ -801,17 +801,6 @@ public class AimScript:MonoBehaviour{
     
     public void HandleGunControls(bool insert_mag_with_number_key) {
     	GunScript gun_script = GetGunScript();
-		
-		/*
-    	// Pull slide or do press check
-    	if(character_input.GetButton("Pull Back Slide")) {
-    		if(character_input.GetButton("Slide Lock")) {
-    			gun_script.Request(GunSystemRequests.INPUT_PULL_SLIDE_PRESS_CHECK);
-    		} else if(character_input.GetButtonUp("Slide Lock")) {
-				gun_script.InputPullSlideBack();
-    		}
-    	}
-		*/
 
     	if(character_input.GetButtonDown("Insert")){
     		if(loose_bullets.Count > 0){

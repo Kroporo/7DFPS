@@ -337,7 +337,12 @@ public class GunScript : MonoBehaviour {
         input.main.Trigger.canceled += ctx => ReleasePressureFromTrigger();
 
         input.main.SlideLock.started += ctx => ReleaseSlideLock();
-        input.main.SlideLock.canceled += ctx => ReleasePressureOnSlideLock();;
+        input.main.SlideLock.canceled += ctx => { // There must be a nicer way to do this
+            if(input.main.PullSlide.ReadValue<float>() > 0.5f)
+                InputPullSlideBack();
+            else
+                ReleasePressureOnSlideLock();
+        };
 
         input.main.Safety.started += ctx => ToggleSafety();
         input.main.Safety.started += ctx => print("toggle");
@@ -350,7 +355,6 @@ public class GunScript : MonoBehaviour {
             else
                 InputPullSlideBack();
         };
-
         input.main.PullSlide.canceled += ctx => ReleaseSlide();
 
         input.main.SwingOutCylinder.started += ctx => SwingOutCylinder();
@@ -378,6 +382,12 @@ public class GunScript : MonoBehaviour {
 
         if(input.main.ExtractorRod.ReadValue<float>() > 0.5f)
             ExtractorRod();
+
+        if(input.main.PullSlide.ReadValue<float>() > 0.5f) {
+            if(input.main.SlideLock.ReadValue<float>() > 0.5f) {
+                Request(GunSystemRequests.INPUT_PULL_SLIDE_PRESS_CHECK);
+            }
+        }
 
         int spin = System.Math.Sign(input.main.SpinCylinder.ReadValue<float>());
         if(spin != 0)
