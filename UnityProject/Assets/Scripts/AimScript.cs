@@ -801,19 +801,8 @@ public class AimScript:MonoBehaviour{
     
     public void HandleGunControls(bool insert_mag_with_number_key) {
     	GunScript gun_script = GetGunScript();
+		
 		/*
-    	if(character_input.GetButton("Trigger")){
-    		gun_script.ApplyPressureToTrigger();
-    	} else {
-    		gun_script.ReleasePressureFromTrigger();
-    	}
-    	if(character_input.GetButtonDown("Slide Lock")){
-    		gun_script.ReleaseSlideLock();
-    	}
-    	if(character_input.GetButtonUp("Slide Lock")){
-    		gun_script.ReleasePressureOnSlideLock();
-    	}
-
     	// Pull slide or do press check
     	if(character_input.GetButton("Pull Back Slide")) {
     		if(character_input.GetButton("Slide Lock")) {
@@ -830,37 +819,8 @@ public class AimScript:MonoBehaviour{
 				gun_script.InputPullSlideBack();
 			}
 		}
-		if(character_input.GetButtonUp("Pull Back Slide")){
-			gun_script.ReleaseSlide();
-		}
-    	if(character_input.GetButton("Slide Lock")) {
-    		gun_script.PressureOnSlideLock();
-    	}
     	if(character_input.GetButtonDown("Toggle Bolt Lock")) {
     		gun_script.ToggleBoltLock();
-    	}
-    	if(character_input.GetButtonDown("Safety")){
-    		gun_script.ToggleSafety();			
-    	}	
-    	if(character_input.GetButtonDown("Auto Mod Toggle")){
-    		gun_script.ToggleAutoMod();			
-    	}
-    	if(character_input.GetButtonDown("Swing Out Cylinder")){
-    		gun_script.SwingOutCylinder();
-    	}	
-    	if(character_input.GetButtonDown("Close Cylinder")){
-    		gun_script.CloseCylinder();
-    	}	
-    	if(character_input.GetButton("Extractor Rod")){
-    		gun_script.ExtractorRod();
-    	}
-		 */
-		/*
-    	if(character_input.GetButton("Hammer")){
-    		gun_script.PressureOnHammer();
-    	}
-    	if(character_input.GetButtonUp("Hammer")){
-    		gun_script.ReleaseHammer();
     	}
     	if(character_input.GetButtonDown("Toggle Stance")){
     		gun_script.InputToggleStance();

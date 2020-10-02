@@ -369,36 +369,7 @@ public class GunScript : MonoBehaviour {
 
 		if(input.main.ExtractorRod.ReadValue<float>() > 0.5f)
 			ExtractorRod();
-/*
-    	if(input.main.GetAxis("Mouse ScrollWheel") != 0.0f){
-    		RotateCylinder((int)Input.GetAxis("Mouse ScrollWheel"));
-    	}*/
 	}
-	/*
-	public void OnFire(InputValue value) {
-		if(value.isPressed)
-			ApplyPressureToTrigger();
-		else
-			ReleasePressureFromTrigger();
-	}
-
-	public void OnHammer(InputValue value) {
-		return;
-		print(value.isPressed);
-		if(value.isPressed)
-			StartCoroutine(ContinuesInput(value, () => ApplyPressureToTrigger()));
-		else
-			ReleaseHammer();
-	}
-
-	private IEnumerator ContinuesInput(InputValue input, Action action) {
-		while (input.isPressed) {
-			print("pressuring");
-			action.Invoke();
-			yield return null;
-		}
-	}
-	 */
 
     public bool ResetRecoil() {
         return Request(GunSystemRequests.RESET_RECOIL);
