@@ -1861,7 +1861,7 @@ public class AimScript:MonoBehaviour{
     // Update is called once per frame
     public void PlatformInputControllerUpdate() {
     	// Get the input vector from kayboard or analog stick
-    	Vector3 directionVector = new Vector3(character_input.GetAxis("Horizontal"), 0.0f, character_input.GetAxis("Vertical"));
+    	Vector3 directionVector = new Vector3(input.main.Horizontal.ReadValue<float>(), 0.0f, input.main.Vertical.ReadValue<float>());
     	
     	if(old_vert_axis < 0.9f && character_input.GetAxis("Vertical") >= 0.9f){
     		if(!crouching && forward_input_delay < 0.4f && !GetComponent<AimScript>().IsAiming()){
@@ -1909,7 +1909,7 @@ public class AimScript:MonoBehaviour{
     // Update is called once per frame
     public void FPSInputControllerUpdate() {
     	// Get the input vector from kayboard or analog stick
-    	Vector3 directionVector = new Vector3(character_input.GetAxis("Horizontal"), character_input.GetAxis("Vertical"), 0.0f);
+    	Vector3 directionVector = new Vector3(input.main.Horizontal.ReadValue<float>(), input.main.Vertical.ReadValue<float>(), 0.0f);
     	
     	if (directionVector != Vector3.zero) {
     		// Get the length of the directon vector and then normalize it
@@ -2020,12 +2020,24 @@ public class AimScript:MonoBehaviour{
     Transform tr;
     
     CharacterController controller;
+    private MovementInputs input;
     
     public void Awake() {
     	controller = GetComponent<CharacterController>();
     	tr = transform;
+
+        input = new MovementInputs();
+        InitInputs();
+    }
+
+    private void OnEnable() {
+        input.Enable();
     }
     
+    public void InitInputs() {
+        
+    }
+
     public Vector3 GetVelocity() {
     	return movement.velocity;
     }
