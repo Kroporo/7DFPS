@@ -2197,15 +2197,15 @@ public class AimScript:MonoBehaviour{
     }
     
     public void CharacterMotorUpdate() {
-    	if(PlayerPrefs.GetInt("toggle_crouch", 1)==1){
-    		if(!GetComponent<AimScript>().IsDead() && Input.GetButtonDown("Crouch Toggle")){
-    			crouching = !crouching;
-    		}
-    	} else {
-    		if(!GetComponent<AimScript>().IsDead()){
+    	if(!IsDead()) {
+    		if(PlayerPrefs.GetInt("toggle_crouch", 1)==1) {
+    			if(Input.GetButtonDown("Crouch Toggle")) {
+    				crouching = !crouching;
+    			}
+    		} else {
     			crouching = Input.GetButton("Crouch Toggle");
     		}
-    	}	
+    	}
     	if(running > 0.0f){
     		crouching = false;
     	}
