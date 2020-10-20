@@ -899,7 +899,7 @@ public class AimScript:MonoBehaviour{
     }
     
     public void HandleControls() {
-    	if(Input.GetButton("Get")){
+    	if(IsPressed(input.main.Pickup)){
     		HandleGetControl();
     	}
     	
