@@ -370,6 +370,10 @@ public class GunScript : MonoBehaviour {
         input.Disable();
     }
 
+    private void OnDestroy() {
+    	input.Dispose();
+    }
+
     public void UpdateInput() {
         if(IsPressed(input.main.Hammer))
             PressureOnHammer();

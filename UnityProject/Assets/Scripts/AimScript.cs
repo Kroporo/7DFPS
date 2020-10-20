@@ -1953,6 +1953,10 @@ public class AimScript:MonoBehaviour{
         input.Enable();
     }
     
+    private void OnDestroy() {
+    	input.Dispose();
+    }
+
     public void InitInputs() {
     	input.Inventory.Holster.started += ctx => SetTargetInventorySlot(-1);
     	input.Inventory.Inventory1.started += ctx => SetTargetInventorySlot(0);
