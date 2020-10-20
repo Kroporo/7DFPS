@@ -97,6 +97,14 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Level Reset"",
+                    ""type"": ""Button"",
+                    ""id"": ""42cc37f9-4c1d-436a-aef0-0a6469830c75"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -251,6 +259,17 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Slomo Toggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""24552e1e-110e-4bed-ada7-2be50ced4493"",
+                    ""path"": ""<Keyboard>/l"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Level Reset"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -488,6 +507,7 @@ public class @MovementInputs : IInputActionCollection, IDisposable
         m_main_AimHold = m_main.FindAction("Aim Hold", throwIfNotFound: true);
         m_main_AimToggle = m_main.FindAction("Aim Toggle", throwIfNotFound: true);
         m_main_SlomoToggle = m_main.FindAction("Slomo Toggle", throwIfNotFound: true);
+        m_main_LevelReset = m_main.FindAction("Level Reset", throwIfNotFound: true);
         // Inventory
         m_Inventory = asset.FindActionMap("Inventory", throwIfNotFound: true);
         m_Inventory_Inventory1 = m_Inventory.FindAction("Inventory1", throwIfNotFound: true);
@@ -560,6 +580,7 @@ public class @MovementInputs : IInputActionCollection, IDisposable
     private readonly InputAction m_main_AimHold;
     private readonly InputAction m_main_AimToggle;
     private readonly InputAction m_main_SlomoToggle;
+    private readonly InputAction m_main_LevelReset;
     public struct MainActions
     {
         private @MovementInputs m_Wrapper;
@@ -574,6 +595,7 @@ public class @MovementInputs : IInputActionCollection, IDisposable
         public InputAction @AimHold => m_Wrapper.m_main_AimHold;
         public InputAction @AimToggle => m_Wrapper.m_main_AimToggle;
         public InputAction @SlomoToggle => m_Wrapper.m_main_SlomoToggle;
+        public InputAction @LevelReset => m_Wrapper.m_main_LevelReset;
         public InputActionMap Get() { return m_Wrapper.m_main; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -613,6 +635,9 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                 @SlomoToggle.started -= m_Wrapper.m_MainActionsCallbackInterface.OnSlomoToggle;
                 @SlomoToggle.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnSlomoToggle;
                 @SlomoToggle.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnSlomoToggle;
+                @LevelReset.started -= m_Wrapper.m_MainActionsCallbackInterface.OnLevelReset;
+                @LevelReset.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnLevelReset;
+                @LevelReset.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnLevelReset;
             }
             m_Wrapper.m_MainActionsCallbackInterface = instance;
             if (instance != null)
@@ -647,6 +672,9 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                 @SlomoToggle.started += instance.OnSlomoToggle;
                 @SlomoToggle.performed += instance.OnSlomoToggle;
                 @SlomoToggle.canceled += instance.OnSlomoToggle;
+                @LevelReset.started += instance.OnLevelReset;
+                @LevelReset.performed += instance.OnLevelReset;
+                @LevelReset.canceled += instance.OnLevelReset;
             }
         }
     }
@@ -776,6 +804,7 @@ public class @MovementInputs : IInputActionCollection, IDisposable
         void OnAimHold(InputAction.CallbackContext context);
         void OnAimToggle(InputAction.CallbackContext context);
         void OnSlomoToggle(InputAction.CallbackContext context);
+        void OnLevelReset(InputAction.CallbackContext context);
     }
     public interface IInventoryActions
     {

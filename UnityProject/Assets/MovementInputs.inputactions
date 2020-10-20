@@ -84,6 +84,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Level Reset",
+                    "type": "Button",
+                    "id": "42cc37f9-4c1d-436a-aef0-0a6469830c75",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -238,6 +246,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Slomo Toggle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "24552e1e-110e-4bed-ada7-2be50ced4493",
+                    "path": "<Keyboard>/l",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Level Reset",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

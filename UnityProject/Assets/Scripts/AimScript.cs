@@ -1068,10 +1068,7 @@ public class AimScript:MonoBehaviour{
     }
     
     public void UpdateLevelResetButton() {
-    	if(Input.GetButtonDown("Level Reset")){
-    		level_reset_hold = 0.01f;
-    	}
-    	if(level_reset_hold != 0.0f && Input.GetButton("Level Reset")){
+    	if(IsPressed(input.main.LevelReset)){
     		level_reset_hold += Time.deltaTime; 
     		dead_volume_fade = Mathf.Min(1.0f-level_reset_hold * 0.5f, dead_volume_fade);
     		dead_fade = level_reset_hold * 0.5f;
