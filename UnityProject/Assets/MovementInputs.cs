@@ -89,6 +89,14 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Slomo Toggle"",
+                    ""type"": ""Button"",
+                    ""id"": ""41cff4ba-5256-4830-9eac-237eaa075508"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -232,6 +240,17 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Aim Toggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c151ab43-6a28-4fd7-88ab-4b99d2c93f80"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Slomo Toggle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -468,6 +487,7 @@ public class @MovementInputs : IInputActionCollection, IDisposable
         m_main_Crouch = m_main.FindAction("Crouch", throwIfNotFound: true);
         m_main_AimHold = m_main.FindAction("Aim Hold", throwIfNotFound: true);
         m_main_AimToggle = m_main.FindAction("Aim Toggle", throwIfNotFound: true);
+        m_main_SlomoToggle = m_main.FindAction("Slomo Toggle", throwIfNotFound: true);
         // Inventory
         m_Inventory = asset.FindActionMap("Inventory", throwIfNotFound: true);
         m_Inventory_Inventory1 = m_Inventory.FindAction("Inventory1", throwIfNotFound: true);
@@ -539,6 +559,7 @@ public class @MovementInputs : IInputActionCollection, IDisposable
     private readonly InputAction m_main_Crouch;
     private readonly InputAction m_main_AimHold;
     private readonly InputAction m_main_AimToggle;
+    private readonly InputAction m_main_SlomoToggle;
     public struct MainActions
     {
         private @MovementInputs m_Wrapper;
@@ -552,6 +573,7 @@ public class @MovementInputs : IInputActionCollection, IDisposable
         public InputAction @Crouch => m_Wrapper.m_main_Crouch;
         public InputAction @AimHold => m_Wrapper.m_main_AimHold;
         public InputAction @AimToggle => m_Wrapper.m_main_AimToggle;
+        public InputAction @SlomoToggle => m_Wrapper.m_main_SlomoToggle;
         public InputActionMap Get() { return m_Wrapper.m_main; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -588,6 +610,9 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                 @AimToggle.started -= m_Wrapper.m_MainActionsCallbackInterface.OnAimToggle;
                 @AimToggle.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnAimToggle;
                 @AimToggle.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnAimToggle;
+                @SlomoToggle.started -= m_Wrapper.m_MainActionsCallbackInterface.OnSlomoToggle;
+                @SlomoToggle.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnSlomoToggle;
+                @SlomoToggle.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnSlomoToggle;
             }
             m_Wrapper.m_MainActionsCallbackInterface = instance;
             if (instance != null)
@@ -619,6 +644,9 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                 @AimToggle.started += instance.OnAimToggle;
                 @AimToggle.performed += instance.OnAimToggle;
                 @AimToggle.canceled += instance.OnAimToggle;
+                @SlomoToggle.started += instance.OnSlomoToggle;
+                @SlomoToggle.performed += instance.OnSlomoToggle;
+                @SlomoToggle.canceled += instance.OnSlomoToggle;
             }
         }
     }
@@ -747,6 +775,7 @@ public class @MovementInputs : IInputActionCollection, IDisposable
         void OnCrouch(InputAction.CallbackContext context);
         void OnAimHold(InputAction.CallbackContext context);
         void OnAimToggle(InputAction.CallbackContext context);
+        void OnSlomoToggle(InputAction.CallbackContext context);
     }
     public interface IInventoryActions
     {

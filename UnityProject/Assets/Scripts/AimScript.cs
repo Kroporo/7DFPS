@@ -933,13 +933,6 @@ public class AimScript:MonoBehaviour{
     			}
     		}
     	}
-    	if(Input.GetButtonDown("Slow Motion Toggle")){
-    		if(Cheats.slomo_mode) {
-    			Cheats.ToggleSlomo();
-    		} else {
-    			slomo_warning_duration = 5f;
-    		}
-    	}
         if(Input.GetButtonDown("Flashlight Toggle")){
             if(held_flashlight != null && mag_stage == HandMagStage.EMPTY && gun_instance == null){
                 held_flashlight.GetComponent<FlashlightScript>().ToggleSwitch();
@@ -1983,6 +1976,8 @@ public class AimScript:MonoBehaviour{
     	input.main.AimHold.started += ctx => SetAiming(true);
     	input.main.AimHold.canceled += ctx => SetAiming(false);
     	input.main.AimToggle.started += ctx => { if(!(IsAiming() && IsPressed(input.main.AimHold))) ToggleAiming(); }; // Toggle aim if we aren't holding the aim button to aim
+
+		input.main.SlomoToggle.started += ctx => ToggleSlomo();
     }
 
     private bool IsPressed(InputAction action) {
@@ -1999,6 +1994,14 @@ public class AimScript:MonoBehaviour{
     private void ToggleAiming() {
     	aiming = !aiming;
     	ChangeAimState(aiming);
+    }
+
+    private void ToggleSlomo() {
+    	if(Cheats.slomo_mode) {
+    		Cheats.ToggleSlomo();
+    	} else {
+    		slomo_warning_duration = 5f;
+    	}
     }
 
     private void ChangeAimState(bool is_aiming) {
