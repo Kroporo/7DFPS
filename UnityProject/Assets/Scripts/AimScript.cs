@@ -190,9 +190,9 @@ public class AimScript:MonoBehaviour{
     // Help
     bool show_help = false;
     bool show_advanced_help = false;
+    bool helpbutton_pressed = false;
     float help_hold_time = 0.0f;
     bool help_ever_shown = false;
-    bool just_started_help = false;
     GUIStyle help_text_style = null;
     float help_text_offset = 0f;
     Color help_normal_color = new Color(.7f, .7f, .7f);
@@ -1045,27 +1045,25 @@ public class AimScript:MonoBehaviour{
     	}
     }
     
-    public void UpdateHelpToggle() {
-    	if(Input.GetButton("Help Toggle")){
-    		help_hold_time += Time.deltaTime;
-    		if(show_help && help_hold_time >= 1.0f){
+    public void UpdateHelpButton() {
+    	if(helpbutton_pressed) {
+    		help_ever_shown = true;
+    
+    		if(help_hold_time == 0f) {
+    			show_help = !show_help;
+    			if(!show_help) {
+    				show_advanced_help = false;
+    			}
+    		}
+    
+    		if(help_hold_time > 1f) {
+    			show_help = true;
     			show_advanced_help = true;
     		}
-    	}
-    	if(Input.GetButtonDown("Help Toggle")){
-    		if(!show_help){
-    			show_help = true;
-    			help_ever_shown = true;
-    			just_started_help = true;
-    		}
-    		help_hold_time = 0.0f;
-    	}
-    	if(Input.GetButtonUp("Help Toggle")){
-    		if(show_help && help_hold_time < 1.0f && !just_started_help){
-    			show_help = false;
-    			show_advanced_help = false;
-    		}
-    		just_started_help = false;
+    
+    		help_hold_time += Time.deltaTime;
+    	} else {
+    		help_hold_time = 0;
     	}
     }
     
@@ -1455,7 +1453,7 @@ public class AimScript:MonoBehaviour{
     	UpdateFallOffMapDeath();
     	UpdateHealth();
     	if(main_client_control){
-    		UpdateHelpToggle();	
+    		UpdateHelpButton();	
     		UpdateLevelResetButton();
     		UpdateLevelChange();
     	}
@@ -1983,6 +1981,9 @@ public class AimScript:MonoBehaviour{
 
 		input.main.SlomoToggle.started += ctx => ToggleSlomo();
 
+    	input.main.HelpButton.started += ctx => helpbutton_pressed = true;
+    	input.main.HelpButton.canceled += ctx => helpbutton_pressed = false;
+    
 		input.Magazine.InsertRound.started += ctx => AddRound();
     }
 

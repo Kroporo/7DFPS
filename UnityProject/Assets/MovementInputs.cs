@@ -113,6 +113,14 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Help Button"",
+                    ""type"": ""Button"",
+                    ""id"": ""3cc6393c-983a-468f-a3d6-0badd5c377de"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -289,6 +297,17 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Flashlight Toggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""30b6f181-ef46-4202-a57e-b644a18a834d"",
+                    ""path"": ""<Keyboard>/slash"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Help Button"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -555,6 +574,7 @@ public class @MovementInputs : IInputActionCollection, IDisposable
         m_main_SlomoToggle = m_main.FindAction("Slomo Toggle", throwIfNotFound: true);
         m_main_LevelReset = m_main.FindAction("Level Reset", throwIfNotFound: true);
         m_main_FlashlightToggle = m_main.FindAction("Flashlight Toggle", throwIfNotFound: true);
+        m_main_HelpButton = m_main.FindAction("Help Button", throwIfNotFound: true);
         // Inventory
         m_Inventory = asset.FindActionMap("Inventory", throwIfNotFound: true);
         m_Inventory_Inventory1 = m_Inventory.FindAction("Inventory1", throwIfNotFound: true);
@@ -632,6 +652,7 @@ public class @MovementInputs : IInputActionCollection, IDisposable
     private readonly InputAction m_main_SlomoToggle;
     private readonly InputAction m_main_LevelReset;
     private readonly InputAction m_main_FlashlightToggle;
+    private readonly InputAction m_main_HelpButton;
     public struct MainActions
     {
         private @MovementInputs m_Wrapper;
@@ -648,6 +669,7 @@ public class @MovementInputs : IInputActionCollection, IDisposable
         public InputAction @SlomoToggle => m_Wrapper.m_main_SlomoToggle;
         public InputAction @LevelReset => m_Wrapper.m_main_LevelReset;
         public InputAction @FlashlightToggle => m_Wrapper.m_main_FlashlightToggle;
+        public InputAction @HelpButton => m_Wrapper.m_main_HelpButton;
         public InputActionMap Get() { return m_Wrapper.m_main; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -693,6 +715,9 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                 @FlashlightToggle.started -= m_Wrapper.m_MainActionsCallbackInterface.OnFlashlightToggle;
                 @FlashlightToggle.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnFlashlightToggle;
                 @FlashlightToggle.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnFlashlightToggle;
+                @HelpButton.started -= m_Wrapper.m_MainActionsCallbackInterface.OnHelpButton;
+                @HelpButton.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnHelpButton;
+                @HelpButton.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnHelpButton;
             }
             m_Wrapper.m_MainActionsCallbackInterface = instance;
             if (instance != null)
@@ -733,6 +758,9 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                 @FlashlightToggle.started += instance.OnFlashlightToggle;
                 @FlashlightToggle.performed += instance.OnFlashlightToggle;
                 @FlashlightToggle.canceled += instance.OnFlashlightToggle;
+                @HelpButton.started += instance.OnHelpButton;
+                @HelpButton.performed += instance.OnHelpButton;
+                @HelpButton.canceled += instance.OnHelpButton;
             }
         }
     }
@@ -897,6 +925,7 @@ public class @MovementInputs : IInputActionCollection, IDisposable
         void OnSlomoToggle(InputAction.CallbackContext context);
         void OnLevelReset(InputAction.CallbackContext context);
         void OnFlashlightToggle(InputAction.CallbackContext context);
+        void OnHelpButton(InputAction.CallbackContext context);
     }
     public interface IInventoryActions
     {
