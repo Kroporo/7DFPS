@@ -630,41 +630,7 @@ public class AimScript:MonoBehaviour{
     	}
     }
     
-    public bool HandleInventoryControls() {	
-    	if(Input.GetButtonDown("Holster")){
-    		target_weapon_slot = -1;
-    	}
-    	if(Input.GetButtonDown("Inventory 1")){
-    		target_weapon_slot = 0;
-    	}
-    	if(Input.GetButtonDown("Inventory 2")){
-    		target_weapon_slot = 1;
-    	}
-    	if(Input.GetButtonDown("Inventory 3")){
-    		target_weapon_slot = 2;
-    	}
-    	if(Input.GetButtonDown("Inventory 4")){
-    		target_weapon_slot = 3;
-    	}
-    	if(Input.GetButtonDown("Inventory 5")){
-    		target_weapon_slot = 4;
-    	}
-    	if(Input.GetButtonDown("Inventory 6")){
-    		target_weapon_slot = 5;
-    	}
-    	if(Input.GetButtonDown("Inventory 7")){
-    		target_weapon_slot = 6;
-    	}
-    	if(Input.GetButtonDown("Inventory 8")){
-    		target_weapon_slot = 7;
-    	}
-    	if(Input.GetButtonDown("Inventory 9")){
-    		target_weapon_slot = 8;
-    	}
-    	if(Input.GetButtonDown("Inventory 10")){
-    		target_weapon_slot = 9;
-    	}
-    	
+    public bool HandleInventoryControls() { 
     	bool mag_ejecting = false;
 		GunScript gunScript = null;
 		if(gun_instance)
@@ -779,6 +745,10 @@ public class AimScript:MonoBehaviour{
     		}
     	}
     	return insert_mag_with_number_key;
+    }
+    
+    private void SetTargetInventorySlot(int target) {
+    	target_weapon_slot = target;
     }
     
     public void HandleGunControls(bool insert_mag_with_number_key) {
@@ -2018,7 +1988,17 @@ public class AimScript:MonoBehaviour{
     }
     
     public void InitInputs() {
-        
+    	input.Inventory.Holster.started += ctx => SetTargetInventorySlot(-1);
+    	input.Inventory.Inventory1.started += ctx => SetTargetInventorySlot(0);
+    	input.Inventory.Inventory2.started += ctx => SetTargetInventorySlot(1);
+    	input.Inventory.Inventory3.started += ctx => SetTargetInventorySlot(2);
+    	input.Inventory.Inventory4.started += ctx => SetTargetInventorySlot(3);
+    	input.Inventory.Inventory5.started += ctx => SetTargetInventorySlot(4);
+    	input.Inventory.Inventory6.started += ctx => SetTargetInventorySlot(5);
+    	input.Inventory.Inventory7.started += ctx => SetTargetInventorySlot(6);
+    	input.Inventory.Inventory8.started += ctx => SetTargetInventorySlot(7);
+    	input.Inventory.Inventory9.started += ctx => SetTargetInventorySlot(8);
+    	input.Inventory.Inventory10.started += ctx => SetTargetInventorySlot(9);
     }
 
     private bool IsPressed(InputAction action) {
