@@ -1995,10 +1995,18 @@ public class AimScript:MonoBehaviour{
     	input.Inventory.Inventory10.started += ctx => SetTargetInventorySlot(9);
 
     	input.main.TapePlayer.started += ctx => ToggleTapePlayer();
+
+    	input.main.Crouch.started += ctx => ToggleCrouch();
     }
 
     private bool IsPressed(InputAction action) {
         return action.ReadValue<float>() > 0.5f;
+    }
+
+    private void ToggleCrouch() {
+    	if(PlayerPrefs.GetInt("toggle_crouch", 1)==1) {
+    		crouching = !crouching;
+    	}
     }
 
     private void ToggleTapePlayer() {
@@ -2197,14 +2205,8 @@ public class AimScript:MonoBehaviour{
     }
     
     public void CharacterMotorUpdate() {
-    	if(!IsDead()) {
-    		if(PlayerPrefs.GetInt("toggle_crouch", 1)==1) {
-    			if(Input.GetButtonDown("Crouch Toggle")) {
-    				crouching = !crouching;
-    			}
-    		} else {
-    			crouching = Input.GetButton("Crouch Toggle");
-    		}
+    	if(!IsDead() && PlayerPrefs.GetInt("toggle_crouch", 1)==0) {
+    		crouching = IsPressed(input.main.Crouch);
     	}
     	if(running > 0.0f){
     		crouching = false;
