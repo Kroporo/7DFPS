@@ -325,7 +325,7 @@ public class GunScript : MonoBehaviour {
     }
 
     // Inputs
-    private GunInputs input;
+    public GunInputs input;
     public void Awake() {
         input = new GunInputs();
         InitInputs();
@@ -364,10 +364,6 @@ public class GunScript : MonoBehaviour {
         input.main.ToggleStance.started += ctx => InputToggleStance();
 
         input.main.BoltLock.started += ctx => ToggleBoltLock();
-    }
-
-    public void OnDisable() {
-        input.Disable();
     }
 
     private void OnDestroy() {

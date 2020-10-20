@@ -720,7 +720,8 @@ public class AimScript:MonoBehaviour{
     				weapon_slots[target_weapon_slot].spring.target_state = 1.0f;
     				weapon_slots[target_weapon_slot].start_pos = gun_instance.transform.position - main_camera.transform.position;
     				weapon_slots[target_weapon_slot].start_rot = Quaternion.Inverse(main_camera.transform.rotation) * gun_instance.transform.rotation;
-    				gun_instance = null;
+    				GetGunScript().input.Disable();
+					gun_instance = null;
     				target_weapon_slot = -2;
     			}
     		} else if(target_weapon_slot >= 0 && (gun_instance == null)){
@@ -729,6 +730,7 @@ public class AimScript:MonoBehaviour{
     			} else {
     				if(weapon_slots[target_weapon_slot].type == WeaponSlotType.GUN){
     					gun_instance = weapon_slots[target_weapon_slot].obj;
+    					GetGunScript().input.Enable();
     					weapon_slots[target_weapon_slot].type = WeaponSlotType.EMPTYING;
     					weapon_slots[target_weapon_slot].spring.target_state = 0.0f;
     					weapon_slots[target_weapon_slot].spring.state = 1.0f;
