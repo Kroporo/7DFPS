@@ -1025,13 +1025,7 @@ public class AimScript:MonoBehaviour{
     		--unplayed_tapes;
     		StartTapePlay();
     	}
-    	if(Input.GetButtonDown("Tape Player") && tape_in_progress){
-    		if(!audiosource_tape_background.isPlaying){
-    			StartTapePlay();
-    		} else {
-    			StopTapePlay();
-    		}
-    	}
+    	
     	if(tape_in_progress && audiosource_tape_background.isPlaying){ 
     		GetComponent<MusicScript>().SetMystical((tapes_heard.Count+1.0f)/total_tapes.Count);
     		audiosource_tape_background.volume = Preferences.voice_volume;
@@ -1999,10 +1993,22 @@ public class AimScript:MonoBehaviour{
     	input.Inventory.Inventory8.started += ctx => SetTargetInventorySlot(7);
     	input.Inventory.Inventory9.started += ctx => SetTargetInventorySlot(8);
     	input.Inventory.Inventory10.started += ctx => SetTargetInventorySlot(9);
+
+    	input.main.TapePlayer.started += ctx => ToggleTapePlayer();
     }
 
     private bool IsPressed(InputAction action) {
         return action.ReadValue<float>() > 0.5f;
+    }
+
+    private void ToggleTapePlayer() {
+    	if(tape_in_progress) {
+    		if(!audiosource_tape_background.isPlaying){
+    			StartTapePlay();
+    		} else {
+    			StopTapePlay();
+    		}
+    	}
     }
 
     public Vector3 GetVelocity() {

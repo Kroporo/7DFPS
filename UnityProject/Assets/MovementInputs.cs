@@ -57,6 +57,14 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Tape Player"",
+                    ""type"": ""Button"",
+                    ""id"": ""b0c5ba89-d29c-451c-8d6f-922d96f5bddb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -156,6 +164,17 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                     ""processors"": ""ScaleVector2(x=0.05,y=0.05)"",
                     ""groups"": """",
                     ""action"": ""Aim Delta"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""39bb189b-0f5f-416e-8901-c8953161871e"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Tape Player"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -388,6 +407,7 @@ public class @MovementInputs : IInputActionCollection, IDisposable
         m_main_Jump = m_main.FindAction("Jump", throwIfNotFound: true);
         m_main_Pickup = m_main.FindAction("Pickup", throwIfNotFound: true);
         m_main_AimDelta = m_main.FindAction("Aim Delta", throwIfNotFound: true);
+        m_main_TapePlayer = m_main.FindAction("Tape Player", throwIfNotFound: true);
         // Inventory
         m_Inventory = asset.FindActionMap("Inventory", throwIfNotFound: true);
         m_Inventory_Inventory1 = m_Inventory.FindAction("Inventory1", throwIfNotFound: true);
@@ -455,6 +475,7 @@ public class @MovementInputs : IInputActionCollection, IDisposable
     private readonly InputAction m_main_Jump;
     private readonly InputAction m_main_Pickup;
     private readonly InputAction m_main_AimDelta;
+    private readonly InputAction m_main_TapePlayer;
     public struct MainActions
     {
         private @MovementInputs m_Wrapper;
@@ -464,6 +485,7 @@ public class @MovementInputs : IInputActionCollection, IDisposable
         public InputAction @Jump => m_Wrapper.m_main_Jump;
         public InputAction @Pickup => m_Wrapper.m_main_Pickup;
         public InputAction @AimDelta => m_Wrapper.m_main_AimDelta;
+        public InputAction @TapePlayer => m_Wrapper.m_main_TapePlayer;
         public InputActionMap Get() { return m_Wrapper.m_main; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -488,6 +510,9 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                 @AimDelta.started -= m_Wrapper.m_MainActionsCallbackInterface.OnAimDelta;
                 @AimDelta.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnAimDelta;
                 @AimDelta.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnAimDelta;
+                @TapePlayer.started -= m_Wrapper.m_MainActionsCallbackInterface.OnTapePlayer;
+                @TapePlayer.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnTapePlayer;
+                @TapePlayer.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnTapePlayer;
             }
             m_Wrapper.m_MainActionsCallbackInterface = instance;
             if (instance != null)
@@ -507,6 +532,9 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                 @AimDelta.started += instance.OnAimDelta;
                 @AimDelta.performed += instance.OnAimDelta;
                 @AimDelta.canceled += instance.OnAimDelta;
+                @TapePlayer.started += instance.OnTapePlayer;
+                @TapePlayer.performed += instance.OnTapePlayer;
+                @TapePlayer.canceled += instance.OnTapePlayer;
             }
         }
     }
@@ -631,6 +659,7 @@ public class @MovementInputs : IInputActionCollection, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnPickup(InputAction.CallbackContext context);
         void OnAimDelta(InputAction.CallbackContext context);
+        void OnTapePlayer(InputAction.CallbackContext context);
     }
     public interface IInventoryActions
     {
