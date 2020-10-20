@@ -5,7 +5,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
-using UnityEngine;
 
 public class @MovementInputs : IInputActionCollection, IDisposable
 {
@@ -103,6 +102,14 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                     ""name"": ""Level Reset"",
                     ""type"": ""Button"",
                     ""id"": ""42cc37f9-4c1d-436a-aef0-0a6469830c75"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Flashlight Toggle"",
+                    ""type"": ""Button"",
+                    ""id"": ""31b390c4-0328-4ab1-9f75-7419ec2264b6"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -271,6 +278,17 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Level Reset"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c5b07a1a-449c-4b23-883c-8a9674336d59"",
+                    ""path"": ""<Keyboard>/v"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Flashlight Toggle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -536,6 +554,7 @@ public class @MovementInputs : IInputActionCollection, IDisposable
         m_main_AimToggle = m_main.FindAction("Aim Toggle", throwIfNotFound: true);
         m_main_SlomoToggle = m_main.FindAction("Slomo Toggle", throwIfNotFound: true);
         m_main_LevelReset = m_main.FindAction("Level Reset", throwIfNotFound: true);
+        m_main_FlashlightToggle = m_main.FindAction("Flashlight Toggle", throwIfNotFound: true);
         // Inventory
         m_Inventory = asset.FindActionMap("Inventory", throwIfNotFound: true);
         m_Inventory_Inventory1 = m_Inventory.FindAction("Inventory1", throwIfNotFound: true);
@@ -612,6 +631,7 @@ public class @MovementInputs : IInputActionCollection, IDisposable
     private readonly InputAction m_main_AimToggle;
     private readonly InputAction m_main_SlomoToggle;
     private readonly InputAction m_main_LevelReset;
+    private readonly InputAction m_main_FlashlightToggle;
     public struct MainActions
     {
         private @MovementInputs m_Wrapper;
@@ -627,6 +647,7 @@ public class @MovementInputs : IInputActionCollection, IDisposable
         public InputAction @AimToggle => m_Wrapper.m_main_AimToggle;
         public InputAction @SlomoToggle => m_Wrapper.m_main_SlomoToggle;
         public InputAction @LevelReset => m_Wrapper.m_main_LevelReset;
+        public InputAction @FlashlightToggle => m_Wrapper.m_main_FlashlightToggle;
         public InputActionMap Get() { return m_Wrapper.m_main; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -669,6 +690,9 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                 @LevelReset.started -= m_Wrapper.m_MainActionsCallbackInterface.OnLevelReset;
                 @LevelReset.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnLevelReset;
                 @LevelReset.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnLevelReset;
+                @FlashlightToggle.started -= m_Wrapper.m_MainActionsCallbackInterface.OnFlashlightToggle;
+                @FlashlightToggle.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnFlashlightToggle;
+                @FlashlightToggle.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnFlashlightToggle;
             }
             m_Wrapper.m_MainActionsCallbackInterface = instance;
             if (instance != null)
@@ -706,6 +730,9 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                 @LevelReset.started += instance.OnLevelReset;
                 @LevelReset.performed += instance.OnLevelReset;
                 @LevelReset.canceled += instance.OnLevelReset;
+                @FlashlightToggle.started += instance.OnFlashlightToggle;
+                @FlashlightToggle.performed += instance.OnFlashlightToggle;
+                @FlashlightToggle.canceled += instance.OnFlashlightToggle;
             }
         }
     }
@@ -869,6 +896,7 @@ public class @MovementInputs : IInputActionCollection, IDisposable
         void OnAimToggle(InputAction.CallbackContext context);
         void OnSlomoToggle(InputAction.CallbackContext context);
         void OnLevelReset(InputAction.CallbackContext context);
+        void OnFlashlightToggle(InputAction.CallbackContext context);
     }
     public interface IInventoryActions
     {

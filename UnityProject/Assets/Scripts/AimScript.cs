@@ -914,11 +914,12 @@ public class AimScript:MonoBehaviour{
     			}
     		}
     	}
-        if(Input.GetButtonDown("Flashlight Toggle")){
-            if(held_flashlight != null && mag_stage == HandMagStage.EMPTY && gun_instance == null){
-                held_flashlight.GetComponent<FlashlightScript>().ToggleSwitch();
-            }
-        }
+    }
+    
+    private void ToggleFlashlight() {
+    	if(held_flashlight != null && mag_stage == HandMagStage.EMPTY && gun_instance == null) {
+    		held_flashlight.GetComponent<FlashlightScript>().ToggleSwitch();
+    	}
     }
     
     private void AddRound() {
@@ -1972,6 +1973,7 @@ public class AimScript:MonoBehaviour{
     	input.Inventory.Inventory10.started += ctx => SetTargetInventorySlot(9);
 
     	input.main.TapePlayer.started += ctx => ToggleTapePlayer();
+    	input.main.FlashlightToggle.started += ctx => ToggleFlashlight();
 
     	input.main.Crouch.started += ctx => ToggleCrouch();
 
