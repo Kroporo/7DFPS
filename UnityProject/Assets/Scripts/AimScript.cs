@@ -1236,16 +1236,17 @@ public class AimScript:MonoBehaviour{
     	
     	bool in_menu = optionsmenuscript.IsMenuShown();
     	if(!dead && !in_menu){
-    		rotation_x += Input.GetAxis("Mouse X") * sensitivity_x;
-    		rotation_y += Input.GetAxis("Mouse Y") * sensitivity_y;
+    		Vector2 mouse_input = input.main.AimDelta.ReadValue<Vector2>();
+    		rotation_x += mouse_input.x * sensitivity_x;
+    		rotation_y += mouse_input.y * sensitivity_y;
     		rotation_y = Mathf.Clamp (rotation_y, min_angle_y, max_angle_y);
     	
     		if((Input.GetButton("Hold To Aim") || aim_toggle) && (gun_instance != null)){
     			view_rotation_y = Mathf.Clamp(view_rotation_y, rotation_y - rotation_y_min_leeway, rotation_y + rotation_y_max_leeway);
     			view_rotation_x = Mathf.Clamp(view_rotation_x, rotation_x - rotation_x_leeway, rotation_x + rotation_x_leeway);
     		} else {
-    			view_rotation_x += Input.GetAxis("Mouse X") * sensitivity_x;
-    			view_rotation_y += Input.GetAxis("Mouse Y") * sensitivity_y;
+    			view_rotation_x += mouse_input.x * sensitivity_x;
+    			view_rotation_y += mouse_input.y * sensitivity_y;
     			view_rotation_y = Mathf.Clamp (view_rotation_y, min_angle_y, max_angle_y);
     			
     			rotation_y = Mathf.Clamp(rotation_y, view_rotation_y - rotation_y_max_leeway, view_rotation_y + rotation_y_min_leeway);

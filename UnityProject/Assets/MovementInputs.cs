@@ -49,6 +49,14 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Aim Delta"",
+                    ""type"": ""Value"",
+                    ""id"": ""95810dea-689d-4c03-aad7-35ce381f2a82"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -139,6 +147,17 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                     ""action"": ""Pickup"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b344c3f2-bded-46d0-9849-71148b723d77"",
+                    ""path"": ""<Pointer>/delta"",
+                    ""interactions"": """",
+                    ""processors"": ""ScaleVector2(x=0.05,y=0.05)"",
+                    ""groups"": """",
+                    ""action"": ""Aim Delta"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -151,6 +170,7 @@ public class @MovementInputs : IInputActionCollection, IDisposable
         m_main_Horizontal = m_main.FindAction("Horizontal", throwIfNotFound: true);
         m_main_Jump = m_main.FindAction("Jump", throwIfNotFound: true);
         m_main_Pickup = m_main.FindAction("Pickup", throwIfNotFound: true);
+        m_main_AimDelta = m_main.FindAction("Aim Delta", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -204,6 +224,7 @@ public class @MovementInputs : IInputActionCollection, IDisposable
     private readonly InputAction m_main_Horizontal;
     private readonly InputAction m_main_Jump;
     private readonly InputAction m_main_Pickup;
+    private readonly InputAction m_main_AimDelta;
     public struct MainActions
     {
         private @MovementInputs m_Wrapper;
@@ -212,6 +233,7 @@ public class @MovementInputs : IInputActionCollection, IDisposable
         public InputAction @Horizontal => m_Wrapper.m_main_Horizontal;
         public InputAction @Jump => m_Wrapper.m_main_Jump;
         public InputAction @Pickup => m_Wrapper.m_main_Pickup;
+        public InputAction @AimDelta => m_Wrapper.m_main_AimDelta;
         public InputActionMap Get() { return m_Wrapper.m_main; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -233,6 +255,9 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                 @Pickup.started -= m_Wrapper.m_MainActionsCallbackInterface.OnPickup;
                 @Pickup.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnPickup;
                 @Pickup.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnPickup;
+                @AimDelta.started -= m_Wrapper.m_MainActionsCallbackInterface.OnAimDelta;
+                @AimDelta.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnAimDelta;
+                @AimDelta.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnAimDelta;
             }
             m_Wrapper.m_MainActionsCallbackInterface = instance;
             if (instance != null)
@@ -249,6 +274,9 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                 @Pickup.started += instance.OnPickup;
                 @Pickup.performed += instance.OnPickup;
                 @Pickup.canceled += instance.OnPickup;
+                @AimDelta.started += instance.OnAimDelta;
+                @AimDelta.performed += instance.OnAimDelta;
+                @AimDelta.canceled += instance.OnAimDelta;
             }
         }
     }
@@ -259,5 +287,6 @@ public class @MovementInputs : IInputActionCollection, IDisposable
         void OnHorizontal(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnPickup(InputAction.CallbackContext context);
+        void OnAimDelta(InputAction.CallbackContext context);
     }
 }
