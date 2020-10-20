@@ -198,7 +198,7 @@ public class AimScript:MonoBehaviour{
     Color help_normal_color = new Color(.7f, .7f, .7f);
     
     // Aim down sights info
-    bool aim_toggle = false;
+	private bool aiming = false;
     const float kAimSpringStrength = 100.0f;
 	const float kAimSpringDamping = 0.00001f;
     Spring aim_spring = new Spring(0.0f,0.0f,kAimSpringStrength,kAimSpringDamping);
@@ -316,7 +316,7 @@ public class AimScript:MonoBehaviour{
     LevelCreatorScript level_creator = null;
     
     public bool IsAiming() {
-    	return (gun_instance != null && aim_spring.target_state == 1.0f);
+    	return aiming && gun_instance != null && !IsDead();
     }
     
     public bool IsDead() {
@@ -763,21 +763,6 @@ public class AimScript:MonoBehaviour{
     			}
     		}
     	}
-    	// Aiming notification
-    	if(!aim_toggle) {
-    		if(Input.GetButtonDown("Hold To Aim")) {
-    			gun_script.InputStartAim();
-    		} else if(Input.GetButtonUp("Hold To Aim")) {
-    			gun_script.InputStopAim();
-    		}
-    	}
-		if(Input.GetButtonDown("Aim Toggle") && !Input.GetButton("Hold To Aim")) {
-			if(aim_toggle) {
-				gun_script.InputStopAim();
-			} else {
-    			gun_script.InputStartAim();
-			}
-		}
 
     	if(gun_script.preferred_tilt != GunTilt.NONE) { // Allow guncomponents to choose how the gun should be tilted
     		gun_tilt = gun_script.preferred_tilt;
@@ -947,9 +932,6 @@ public class AimScript:MonoBehaviour{
     				PlaySoundFromGroup(sound_bullet_grab, 0.2f);
     			}
     		}
-    	}
-    	if(Input.GetButtonDown("Aim Toggle")){
-    		aim_toggle = !aim_toggle;
     	}
     	if(Input.GetButtonDown("Slow Motion Toggle")){
     		if(Cheats.slomo_mode) {
@@ -1160,7 +1142,7 @@ public class AimScript:MonoBehaviour{
     
     public void UpdateAimSpring() {
     	bool offset_aim_target = false;
-    	if((Input.GetButton("Hold To Aim") || aim_toggle) && !dead && (gun_instance != null)){
+    	if(IsAiming()){
     		aim_spring.target_state = 1.0f;
     		RaycastHit hit = new RaycastHit();
     		if(Physics.Linecast(main_camera.transform.position, AimPos() + AimDir() * 0.2f, out hit, 1 << 0)){
@@ -1205,7 +1187,7 @@ public class AimScript:MonoBehaviour{
     		rotation_y += mouse_input.y * sensitivity_y;
     		rotation_y = Mathf.Clamp (rotation_y, min_angle_y, max_angle_y);
     	
-    		if((Input.GetButton("Hold To Aim") || aim_toggle) && (gun_instance != null)){
+    		if(IsAiming()){
     			view_rotation_y = Mathf.Clamp(view_rotation_y, rotation_y - rotation_y_min_leeway, rotation_y + rotation_y_max_leeway);
     			view_rotation_x = Mathf.Clamp(view_rotation_x, rotation_x - rotation_x_leeway, rotation_x + rotation_x_leeway);
     		} else {
@@ -1997,10 +1979,37 @@ public class AimScript:MonoBehaviour{
     	input.main.TapePlayer.started += ctx => ToggleTapePlayer();
 
     	input.main.Crouch.started += ctx => ToggleCrouch();
+
+    	input.main.AimHold.started += ctx => SetAiming(true);
+    	input.main.AimHold.canceled += ctx => SetAiming(false);
+    	input.main.AimToggle.started += ctx => { if(!(IsAiming() && IsPressed(input.main.AimHold))) ToggleAiming(); }; // Toggle aim if we aren't holding the aim button to aim
     }
 
     private bool IsPressed(InputAction action) {
         return action.ReadValue<float>() > 0.5f;
+    }
+
+    private void SetAiming(bool is_aiming) {
+    	if(aiming != is_aiming) {
+    		aiming = is_aiming;
+    		ChangeAimState(aiming);
+    	}
+    }
+
+    private void ToggleAiming() {
+    	aiming = !aiming;
+    	ChangeAimState(aiming);
+    }
+
+    private void ChangeAimState(bool is_aiming) {
+    	GunScript gun_script = GetGunScript();
+    	if(gun_script) {
+    		if(is_aiming) {
+    			gun_script.InputStartAim();
+    		} else {
+    			gun_script.InputStopAim();
+    		}
+    	}
     }
 
     private void ToggleCrouch() {

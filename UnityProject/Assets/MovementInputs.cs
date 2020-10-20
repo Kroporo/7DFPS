@@ -73,6 +73,22 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Aim Hold"",
+                    ""type"": ""Button"",
+                    ""id"": ""9a7de4c1-f7c9-45e5-acef-b6e54a1c4add"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Aim Toggle"",
+                    ""type"": ""Button"",
+                    ""id"": ""b88067ee-b020-4ad5-a225-c7856ec185ba"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -194,6 +210,28 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0c0cec2f-18ed-4c0f-9944-51ff8a247992"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Aim Hold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3985fadf-3944-478f-b8a3-0641408bb6f1"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Aim Toggle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -428,6 +466,8 @@ public class @MovementInputs : IInputActionCollection, IDisposable
         m_main_AimDelta = m_main.FindAction("Aim Delta", throwIfNotFound: true);
         m_main_TapePlayer = m_main.FindAction("Tape Player", throwIfNotFound: true);
         m_main_Crouch = m_main.FindAction("Crouch", throwIfNotFound: true);
+        m_main_AimHold = m_main.FindAction("Aim Hold", throwIfNotFound: true);
+        m_main_AimToggle = m_main.FindAction("Aim Toggle", throwIfNotFound: true);
         // Inventory
         m_Inventory = asset.FindActionMap("Inventory", throwIfNotFound: true);
         m_Inventory_Inventory1 = m_Inventory.FindAction("Inventory1", throwIfNotFound: true);
@@ -497,6 +537,8 @@ public class @MovementInputs : IInputActionCollection, IDisposable
     private readonly InputAction m_main_AimDelta;
     private readonly InputAction m_main_TapePlayer;
     private readonly InputAction m_main_Crouch;
+    private readonly InputAction m_main_AimHold;
+    private readonly InputAction m_main_AimToggle;
     public struct MainActions
     {
         private @MovementInputs m_Wrapper;
@@ -508,6 +550,8 @@ public class @MovementInputs : IInputActionCollection, IDisposable
         public InputAction @AimDelta => m_Wrapper.m_main_AimDelta;
         public InputAction @TapePlayer => m_Wrapper.m_main_TapePlayer;
         public InputAction @Crouch => m_Wrapper.m_main_Crouch;
+        public InputAction @AimHold => m_Wrapper.m_main_AimHold;
+        public InputAction @AimToggle => m_Wrapper.m_main_AimToggle;
         public InputActionMap Get() { return m_Wrapper.m_main; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -538,6 +582,12 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                 @Crouch.started -= m_Wrapper.m_MainActionsCallbackInterface.OnCrouch;
                 @Crouch.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnCrouch;
                 @Crouch.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnCrouch;
+                @AimHold.started -= m_Wrapper.m_MainActionsCallbackInterface.OnAimHold;
+                @AimHold.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnAimHold;
+                @AimHold.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnAimHold;
+                @AimToggle.started -= m_Wrapper.m_MainActionsCallbackInterface.OnAimToggle;
+                @AimToggle.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnAimToggle;
+                @AimToggle.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnAimToggle;
             }
             m_Wrapper.m_MainActionsCallbackInterface = instance;
             if (instance != null)
@@ -563,6 +613,12 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                 @Crouch.started += instance.OnCrouch;
                 @Crouch.performed += instance.OnCrouch;
                 @Crouch.canceled += instance.OnCrouch;
+                @AimHold.started += instance.OnAimHold;
+                @AimHold.performed += instance.OnAimHold;
+                @AimHold.canceled += instance.OnAimHold;
+                @AimToggle.started += instance.OnAimToggle;
+                @AimToggle.performed += instance.OnAimToggle;
+                @AimToggle.canceled += instance.OnAimToggle;
             }
         }
     }
@@ -689,6 +745,8 @@ public class @MovementInputs : IInputActionCollection, IDisposable
         void OnAimDelta(InputAction.CallbackContext context);
         void OnTapePlayer(InputAction.CallbackContext context);
         void OnCrouch(InputAction.CallbackContext context);
+        void OnAimHold(InputAction.CallbackContext context);
+        void OnAimToggle(InputAction.CallbackContext context);
     }
     public interface IInventoryActions
     {
