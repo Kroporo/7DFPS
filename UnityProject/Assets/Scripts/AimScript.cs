@@ -1846,7 +1846,7 @@ public class AimScript:MonoBehaviour{
     	// Get the input vector from kayboard or analog stick
     	Vector3 directionVector = new Vector3(input.main.Horizontal.ReadValue<float>(), 0.0f, input.main.Vertical.ReadValue<float>());
     	
-    	if(old_vert_axis < 0.9f && Input.GetAxis("Vertical") >= 0.9f){
+    	if(old_vert_axis < 0.9f && input.main.Vertical.ReadValue<float>() >= 0.9f){
     		if(!crouching && forward_input_delay < 0.4f && !GetComponent<AimScript>().IsAiming()){
     			SetRunning(Mathf.Clamp((0.4f-forward_input_delay)/0.2f,0.01f,1.0f));
     			bool_running = true;			
@@ -1861,7 +1861,7 @@ public class AimScript:MonoBehaviour{
     	if(bool_running){
     		directionVector.z = 1.0f;
     	}
-    	old_vert_axis = Input.GetAxis("Vertical");
+    	old_vert_axis = input.main.Vertical.ReadValue<float>();
     	
     	if (directionVector != Vector3.zero) {
     		// Get the length of the directon vector and then normalize it
