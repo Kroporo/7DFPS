@@ -527,7 +527,7 @@ public class AimScript:MonoBehaviour{
     }
     
     public GunScript GetGunScript() {
-    	return gun_instance.GetComponent<GunScript>();
+    	return gun_instance?.GetComponent<GunScript>();
     }
     
     public Vector3 mix(Vector3 a,Vector3 b,float val){
