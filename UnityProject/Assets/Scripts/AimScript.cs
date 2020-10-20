@@ -754,16 +754,6 @@ public class AimScript:MonoBehaviour{
     public void HandleGunControls(bool insert_mag_with_number_key) {
     	GunScript gun_script = GetGunScript();
 
-    	if(Input.GetButtonDown("Insert")){
-    		if(loose_bullets.Count > 0){
-    			if(GetGunScript().AddRoundToCylinder()){
-    				GameObject.Destroy(loose_bullets[loose_bullets.Count-1]);
-    				loose_bullets.RemoveAt(loose_bullets.Count-1);
-    				loose_bullet_spring.RemoveAt(loose_bullet_spring.Count-1);
-    			}
-    		}
-    	}
-
     	if(gun_script.preferred_tilt != GunTilt.NONE) { // Allow guncomponents to choose how the gun should be tilted
     		gun_tilt = gun_script.preferred_tilt;
     	} else if(slide_pose_spring.target_state < 0.1f && reload_pose_spring.target_state < 0.1f){
@@ -917,15 +907,6 @@ public class AimScript:MonoBehaviour{
     	if(gun_instance != null){
     		HandleGunControls(insert_mag_with_number_key);
     	} else if(mag_stage == HandMagStage.HOLD){
-    		if(Input.GetButtonDown("Insert")){
-    			if(loose_bullets.Count > 0){
-    				if(magazine_instance_in_hand.GetComponent<mag_script>().AddRound()){
-    					GameObject.Destroy(loose_bullets[loose_bullets.Count-1]);
-    					loose_bullets.RemoveAt(loose_bullets.Count-1);
-    					loose_bullet_spring.RemoveAt(loose_bullet_spring.Count-1);
-    				}
-    			}
-    		}
     		if(Input.GetButtonDown("Pull Back Slide")){
     			if(magazine_instance_in_hand.GetComponent<mag_script>().RemoveRoundAnimated()){
     				AddLooseBullet(true);
@@ -938,6 +919,26 @@ public class AimScript:MonoBehaviour{
                 held_flashlight.GetComponent<FlashlightScript>().ToggleSwitch();
             }
         }
+    }
+    
+    private void AddRound() {
+    	if(loose_bullets.Count > 0) {
+    		if(gun_instance == null && mag_stage == HandMagStage.HOLD) {
+    			if(magazine_instance_in_hand.GetComponent<mag_script>().AddRound()) {
+    				RemoveLooseRound();
+    			}
+    		} else {
+    			if(GetGunScript().AddRoundToCylinder()) {
+    				RemoveLooseRound();
+    			}
+    		}
+    	}
+    }
+
+    private void RemoveLooseRound() {
+    	GameObject.Destroy(loose_bullets[loose_bullets.Count-1]);
+    	loose_bullets.RemoveAt(loose_bullets.Count-1);
+    	loose_bullet_spring.RemoveAt(loose_bullet_spring.Count-1);
     }
     
     public void StartTapePlay() {
@@ -1979,6 +1980,8 @@ public class AimScript:MonoBehaviour{
     	input.main.AimToggle.started += ctx => { if(!(IsAiming() && IsPressed(input.main.AimHold))) ToggleAiming(); }; // Toggle aim if we aren't holding the aim button to aim
 
 		input.main.SlomoToggle.started += ctx => ToggleSlomo();
+
+		input.Magazine.InsertRound.started += ctx => AddRound();
     }
 
     private bool IsPressed(InputAction action) {

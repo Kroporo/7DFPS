@@ -478,6 +478,33 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Magazine",
+            "id": "fef7530b-8765-4afa-b31f-11f179d17f6e",
+            "actions": [
+                {
+                    "name": "Insert Round",
+                    "type": "Button",
+                    "id": "d373bd51-1c3d-46a6-9282-538ccf00c5ab",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "f958cded-a188-4c75-97dd-e27118c1808b",
+                    "path": "<Keyboard>/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Insert Round",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

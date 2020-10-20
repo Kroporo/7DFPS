@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
+using UnityEngine;
 
 public class @MovementInputs : IInputActionCollection, IDisposable
 {
@@ -491,6 +492,33 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Magazine"",
+            ""id"": ""fef7530b-8765-4afa-b31f-11f179d17f6e"",
+            ""actions"": [
+                {
+                    ""name"": ""Insert Round"",
+                    ""type"": ""Button"",
+                    ""id"": ""d373bd51-1c3d-46a6-9282-538ccf00c5ab"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""f958cded-a188-4c75-97dd-e27118c1808b"",
+                    ""path"": ""<Keyboard>/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Insert Round"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -521,6 +549,9 @@ public class @MovementInputs : IInputActionCollection, IDisposable
         m_Inventory_Inventory9 = m_Inventory.FindAction("Inventory9", throwIfNotFound: true);
         m_Inventory_Inventory10 = m_Inventory.FindAction("Inventory10", throwIfNotFound: true);
         m_Inventory_Holster = m_Inventory.FindAction("Holster", throwIfNotFound: true);
+        // Magazine
+        m_Magazine = asset.FindActionMap("Magazine", throwIfNotFound: true);
+        m_Magazine_InsertRound = m_Magazine.FindAction("Insert Round", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -792,6 +823,39 @@ public class @MovementInputs : IInputActionCollection, IDisposable
         }
     }
     public InventoryActions @Inventory => new InventoryActions(this);
+
+    // Magazine
+    private readonly InputActionMap m_Magazine;
+    private IMagazineActions m_MagazineActionsCallbackInterface;
+    private readonly InputAction m_Magazine_InsertRound;
+    public struct MagazineActions
+    {
+        private @MovementInputs m_Wrapper;
+        public MagazineActions(@MovementInputs wrapper) { m_Wrapper = wrapper; }
+        public InputAction @InsertRound => m_Wrapper.m_Magazine_InsertRound;
+        public InputActionMap Get() { return m_Wrapper.m_Magazine; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(MagazineActions set) { return set.Get(); }
+        public void SetCallbacks(IMagazineActions instance)
+        {
+            if (m_Wrapper.m_MagazineActionsCallbackInterface != null)
+            {
+                @InsertRound.started -= m_Wrapper.m_MagazineActionsCallbackInterface.OnInsertRound;
+                @InsertRound.performed -= m_Wrapper.m_MagazineActionsCallbackInterface.OnInsertRound;
+                @InsertRound.canceled -= m_Wrapper.m_MagazineActionsCallbackInterface.OnInsertRound;
+            }
+            m_Wrapper.m_MagazineActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @InsertRound.started += instance.OnInsertRound;
+                @InsertRound.performed += instance.OnInsertRound;
+                @InsertRound.canceled += instance.OnInsertRound;
+            }
+        }
+    }
+    public MagazineActions @Magazine => new MagazineActions(this);
     public interface IMainActions
     {
         void OnVertical(InputAction.CallbackContext context);
@@ -819,5 +883,9 @@ public class @MovementInputs : IInputActionCollection, IDisposable
         void OnInventory9(InputAction.CallbackContext context);
         void OnInventory10(InputAction.CallbackContext context);
         void OnHolster(InputAction.CallbackContext context);
+    }
+    public interface IMagazineActions
+    {
+        void OnInsertRound(InputAction.CallbackContext context);
     }
 }
