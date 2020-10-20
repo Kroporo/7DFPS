@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using System.Collections;
 using GunSystemInterfaces;
@@ -1880,7 +1881,7 @@ public class AimScript:MonoBehaviour{
     	
     	// Apply the direction to the CharacterMotor
     	inputMoveDirection = transform.rotation * directionVector;
-    	inputJump = Input.GetButton("Jump");
+    	inputJump = IsPressed(input.main.Jump);
     }
     
     // This makes the character turn to face the current movement speed per default.
@@ -1918,7 +1919,7 @@ public class AimScript:MonoBehaviour{
     	
     	// Apply the direction to the CharacterMotor
     	inputMoveDirection = directionVector;
-    	inputJump = Input.GetButton("Jump");
+    	inputJump = IsPressed(input.main.Jump);
     	
     	// Set rotation to the move direction	
     	if (autoRotate && directionVector.sqrMagnitude > 0.01f) {
@@ -2017,6 +2018,10 @@ public class AimScript:MonoBehaviour{
     
     public void InitInputs() {
         
+    }
+
+    private bool IsPressed(InputAction action) {
+        return action.ReadValue<float>() > 0.5f;
     }
 
     public Vector3 GetVelocity() {

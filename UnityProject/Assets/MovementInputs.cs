@@ -33,6 +33,14 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""f77db03f-40dd-4427-9888-f79ce68461f9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -101,6 +109,17 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                     ""action"": ""Horizontal"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4b0ab3d2-6d28-4d85-a1ac-1c4a29b8a723"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -111,6 +130,7 @@ public class @MovementInputs : IInputActionCollection, IDisposable
         m_main = asset.FindActionMap("main", throwIfNotFound: true);
         m_main_Vertical = m_main.FindAction("Vertical", throwIfNotFound: true);
         m_main_Horizontal = m_main.FindAction("Horizontal", throwIfNotFound: true);
+        m_main_Jump = m_main.FindAction("Jump", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -162,12 +182,14 @@ public class @MovementInputs : IInputActionCollection, IDisposable
     private IMainActions m_MainActionsCallbackInterface;
     private readonly InputAction m_main_Vertical;
     private readonly InputAction m_main_Horizontal;
+    private readonly InputAction m_main_Jump;
     public struct MainActions
     {
         private @MovementInputs m_Wrapper;
         public MainActions(@MovementInputs wrapper) { m_Wrapper = wrapper; }
         public InputAction @Vertical => m_Wrapper.m_main_Vertical;
         public InputAction @Horizontal => m_Wrapper.m_main_Horizontal;
+        public InputAction @Jump => m_Wrapper.m_main_Jump;
         public InputActionMap Get() { return m_Wrapper.m_main; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -183,6 +205,9 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                 @Horizontal.started -= m_Wrapper.m_MainActionsCallbackInterface.OnHorizontal;
                 @Horizontal.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnHorizontal;
                 @Horizontal.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnHorizontal;
+                @Jump.started -= m_Wrapper.m_MainActionsCallbackInterface.OnJump;
+                @Jump.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnJump;
+                @Jump.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnJump;
             }
             m_Wrapper.m_MainActionsCallbackInterface = instance;
             if (instance != null)
@@ -193,6 +218,9 @@ public class @MovementInputs : IInputActionCollection, IDisposable
                 @Horizontal.started += instance.OnHorizontal;
                 @Horizontal.performed += instance.OnHorizontal;
                 @Horizontal.canceled += instance.OnHorizontal;
+                @Jump.started += instance.OnJump;
+                @Jump.performed += instance.OnJump;
+                @Jump.canceled += instance.OnJump;
             }
         }
     }
@@ -201,5 +229,6 @@ public class @MovementInputs : IInputActionCollection, IDisposable
     {
         void OnVertical(InputAction.CallbackContext context);
         void OnHorizontal(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
     }
 }
