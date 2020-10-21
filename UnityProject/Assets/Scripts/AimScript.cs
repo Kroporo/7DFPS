@@ -183,7 +183,6 @@ public class AimScript:MonoBehaviour{
     // Links to other objects in scene
     [HideInInspector]
     public GameObject main_camera;
-    CharacterController character_controller;
     GUISkinHolder holder;
     WeaponHolder weapon_holder;
     
@@ -461,7 +460,7 @@ public class AimScript:MonoBehaviour{
     		main_camera = new GameObject();
     		GetComponent<MusicScript>().enabled = false;
     	}
-    	character_controller = GetComponent<CharacterController>();
+    	controller = GetComponent<CharacterController>();
     	for(int i=0; i<kMaxHeadRecoil; ++i){
     		head_recoil_delay[i] = -1.0f;
     	}
@@ -868,7 +867,7 @@ public class AimScript:MonoBehaviour{
     			mag_stage = HandMagStage.EMPTY;
     			magazine_instance_in_hand.AddComponent<Rigidbody>();
     			magazine_instance_in_hand.GetComponent<Rigidbody>().interpolation = RigidbodyInterpolation.Interpolate;
-    			magazine_instance_in_hand.GetComponent<Rigidbody>().velocity = character_controller.velocity;
+    			magazine_instance_in_hand.GetComponent<Rigidbody>().velocity = controller.velocity;
                 magazine_instance_in_hand.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.Continuous;
 
                 if(level_creator != null) {
@@ -880,7 +879,7 @@ public class AimScript:MonoBehaviour{
     		} else if(held_flashlight != null && mag_stage == HandMagStage.EMPTY && gun_instance == null){
                 held_flashlight.AddComponent<Rigidbody>();
                 held_flashlight.GetComponent<Rigidbody>().interpolation = RigidbodyInterpolation.Interpolate;
-                held_flashlight.GetComponent<Rigidbody>().velocity = character_controller.velocity;
+                held_flashlight.GetComponent<Rigidbody>().velocity = controller.velocity;
                 held_flashlight.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.Continuous;
 
                 if(level_creator != null){
@@ -1095,7 +1094,7 @@ public class AimScript:MonoBehaviour{
     		head_tilt += head_tilt_vel * Time.deltaTime;
     		view_rotation_x += head_tilt_x_vel * Time.deltaTime;
     		view_rotation_y += head_tilt_y_vel * Time.deltaTime;
-    		float min_fall = character_controller.height * character_controller.transform.localScale.y * -1.0f;
+    		float min_fall = controller.height * controller.transform.localScale.y * -1.0f;
     		if(head_fall < min_fall && head_fall_vel < 0.0f){			
     			if(Mathf.Abs(head_fall_vel) > 0.5f){
     				head_recoil_spring_x.vel += UnityEngine.Random.Range(-10,10) * Mathf.Abs(head_fall_vel);
@@ -1196,12 +1195,12 @@ public class AimScript:MonoBehaviour{
     public void UpdateCameraAndPlayerTransformation() {
     	main_camera.transform.localEulerAngles = new Vector3(-view_rotation_y, view_rotation_x, head_tilt);
     	main_camera.transform.localEulerAngles += new Vector3(head_recoil_spring_y.state, head_recoil_spring_x.state, 0.0f); 
-    	var tmp_cs1 = character_controller.transform.localEulerAngles;
+    	var tmp_cs1 = controller.transform.localEulerAngles;
         tmp_cs1.y = view_rotation_x;
-        character_controller.transform.localEulerAngles = tmp_cs1;
+        controller.transform.localEulerAngles = tmp_cs1;
     	main_camera.transform.position = transform.position;
     	var tmp_cs2 = main_camera.transform.position;
-        tmp_cs2.y += character_controller.height * character_controller.transform.localScale.y - 0.1f;
+        tmp_cs2.y += controller.height * controller.transform.localScale.y - 0.1f;
         tmp_cs2.y += head_fall;
         main_camera.transform.position = tmp_cs2;
     }
@@ -1425,7 +1424,7 @@ public class AimScript:MonoBehaviour{
     }
     
     public void UpdatePickupMagnet() {
-    	Vector3 attract_pos = transform.position - new Vector3(0.0f,character_controller.height * 0.2f,0.0f);
+    	Vector3 attract_pos = transform.position - new Vector3(0.0f, controller.height * 0.2f, 0.0f);
     	for(int i=0; i<items_being_picked_up.Count; ++i){
     		GameObject round = items_being_picked_up[i];
     		if(round == null){
@@ -1942,8 +1941,6 @@ public class AimScript:MonoBehaviour{
     private MovementInputs input;
     
     public void Awake() {
-    	controller = GetComponent<CharacterController>();
-
         input = new MovementInputs();
         InitInputs();
     }
