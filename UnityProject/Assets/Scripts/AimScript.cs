@@ -508,6 +508,7 @@ public class AimScript:MonoBehaviour{
     	}
     
     	total_tapes = new List<AudioClip>(tapes_remaining);
+    	InitInputs();
     }
     
     public float GunDist() {
@@ -1942,7 +1943,6 @@ public class AimScript:MonoBehaviour{
     
     public void Awake() {
         input = new MovementInputs();
-        InitInputs();
     }
 
     private void OnEnable() {
