@@ -1938,14 +1938,11 @@ public class AimScript:MonoBehaviour{
     
     Vector3 lastGroundNormal = Vector3.zero;
     
-    Transform tr;
-    
     CharacterController controller;
     private MovementInputs input;
     
     public void Awake() {
     	controller = GetComponent<CharacterController>();
-    	tr = transform;
 
         input = new MovementInputs();
         InitInputs();
@@ -2069,12 +2066,12 @@ public class AimScript:MonoBehaviour{
             float yRotation = rotationDiff.eulerAngles.y;
             if (yRotation != 0) {
     	        // Prevent rotation of the local up vector
-    	        tr.Rotate(0.0f, yRotation, 0.0f);
+    	        transform.Rotate(0.0f, yRotation, 0.0f);
             }
     	}
     	
     	// Save lastPosition for velocity calculation.
-    	Vector3 lastPosition = tr.position;
+    	Vector3 lastPosition = transform.position;
     	
     	// We always want the movement to be framerate independent.  Multiplying by Time.deltaTime does this.
     	Vector3 currentMovementOffset = velocity * Time.deltaTime;
@@ -2108,7 +2105,7 @@ public class AimScript:MonoBehaviour{
     	// Calculate the velocity based on the current and previous position.  
     	// This means our velocity will only be the amount the character actually moved as a result of collisions.
     	Vector3 oldHVelocity = new Vector3(velocity.x, 0.0f, velocity.z);
-    	movement.velocity = (tr.position - lastPosition) / Time.deltaTime;
+    	movement.velocity = (transform.position - lastPosition) / Time.deltaTime;
     	Vector3 newHVelocity = new Vector3(movement.velocity.x, 0.0f, movement.velocity.z);
     	
     	// The CharacterController can be moved in unwanted directions when colliding with things.
@@ -2152,7 +2149,7 @@ public class AimScript:MonoBehaviour{
     		SendMessage("OnFall", SendMessageOptions.DontRequireReceiver);
     		// We pushed the character down to ensure it would stay on the ground if there was any.
     		// But there wasn't so now we cancel the downwards offset to make the fall smoother.
-    		tr.position += pushDownOffset * Vector3.up;
+    		transform.position += pushDownOffset * Vector3.up;
     	}
     	// We were not grounded but just landed on something
     	else if (!grounded && IsGroundedTest()) {
@@ -2174,11 +2171,11 @@ public class AimScript:MonoBehaviour{
     	if (MoveWithPlatform()) {
     		// Use the center of the lower half sphere of the capsule as reference point.
     		// This works best when the character is standing on moving tilting platforms. 
-    		movingPlatform.activeGlobalPoint = tr.position + Vector3.up * (controller.center.y - controller.height*0.5f + controller.radius);
+    		movingPlatform.activeGlobalPoint = transform.position + Vector3.up * (controller.center.y - controller.height*0.5f + controller.radius);
     		movingPlatform.activeLocalPoint = movingPlatform.activePlatform.InverseTransformPoint(movingPlatform.activeGlobalPoint);
     		
     		// Support moving platform rotation as well:
-            movingPlatform.activeGlobalRotation = tr.rotation;
+            movingPlatform.activeGlobalRotation = transform.rotation;
             movingPlatform.activeLocalRotation = Quaternion.Inverse(movingPlatform.activePlatform.rotation) * movingPlatform.activeGlobalRotation; 
     	}
     }
@@ -2457,14 +2454,14 @@ public class AimScript:MonoBehaviour{
     	}
     	
     	// Find desired velocity
-    	Vector3 desiredLocalDirection = tr.InverseTransformDirection(inputMoveDirection);
+    	Vector3 desiredLocalDirection = transform.InverseTransformDirection(inputMoveDirection);
     	float maxSpeed = MaxSpeedInDirection(desiredLocalDirection);
     	if (grounded) {
     		// Modify max speed on slopes based on slope speed multiplier curve
     		float movementSlopeAngle = Mathf.Asin(movement.velocity.normalized.y)  * Mathf.Rad2Deg;
     		maxSpeed *= movement.slopeSpeedMultiplier.Evaluate(movementSlopeAngle);
     	}
-    	die_dir = tr.TransformDirection(desiredLocalDirection * maxSpeed);
+    	die_dir = transform.TransformDirection(desiredLocalDirection * maxSpeed);
     	return die_dir;
     }
     
