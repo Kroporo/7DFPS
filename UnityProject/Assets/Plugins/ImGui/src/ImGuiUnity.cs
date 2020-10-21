@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using ImGuiNET;
 #if STEAMVR_ENABLED
@@ -92,8 +93,6 @@ public class ImGuiUnity : MonoBehaviour {
     Texture2D fontTexture;
     IntPtr fontTexturePtr;
     public ImFontPtr[] imFonts { get; private set; }
-
-    KeyCode[] keyCodes;
 
     Texture2D currentCursorTex = null;
 
@@ -308,7 +307,7 @@ public class ImGuiUnity : MonoBehaviour {
         SetPerFrameImGuiData();
         if (enableInput)
         {
-            UpdateInput();
+            try
         }
 
         if(!override_new_frame)
@@ -535,42 +534,36 @@ public class ImGuiUnity : MonoBehaviour {
 
         if (enableMouse)
         {
-            Vector2 mPos = Input.mousePosition;
+            Vector2 mPos = Pointer.current.position.ReadValue();
             mPos.y = Screen.height - mPos.y;
             io.MousePos = mPos;
-            io.MouseWheel = Input.mouseScrollDelta.y;
+            io.MouseWheel = Mouse.current.scroll.y.ReadValue();
             RangeAccessor<Bool8> mouseDown = io.MouseDown;
-            mouseDown[0] = Input.GetMouseButton(0);
-            mouseDown[1] = Input.GetMouseButton(1);
-            mouseDown[2] = Input.GetMouseButton(2);
+            mouseDown[0] = Mouse.current.leftButton.IsPressed();
+            mouseDown[1] = Mouse.current.rightButton.IsPressed();
+            mouseDown[2] = Mouse.current.middleButton.IsPressed();
         }
 
         if (enableTextInput)
         {
-            foreach (char c in Input.inputString)
-            {
-                io.AddInputCharacter(c);
-            }
+            //foreach (char c in Input.inputString)
+            //{
+            //    io.AddInputCharacter(c); // TODO reimplement
+            //}
         }
 
         if (enableKeyboard)
         {
             RangeAccessor<Bool8> keysDown = io.KeysDown;
 
-            if (keyCodes == null)
-            {
-                keyCodes = (KeyCode[])Enum.GetValues(typeof(KeyCode));
+            foreach (UnityEngine.InputSystem.Controls.KeyControl keycontrol in Keyboard.current.allKeys) {
+                keysDown[(int)keycontrol.keyCode] = keycontrol.IsPressed();
             }
 
-            foreach (KeyCode keyCode in keyCodes)
-            {
-                keysDown[(int)keyCode] = Input.GetKey(keyCode);
-            }
-
-            io.KeyCtrl = Input.GetKey(KeyCode.RightControl) || Input.GetKey(KeyCode.LeftControl);
-            io.KeyAlt = Input.GetKey(KeyCode.RightAlt) || Input.GetKey(KeyCode.LeftAlt);
-            io.KeyShift = Input.GetKey(KeyCode.RightShift) || Input.GetKey(KeyCode.LeftShift);
-            io.KeySuper = Input.GetKey(KeyCode.RightWindows) || Input.GetKey(KeyCode.LeftWindows);
+            io.KeyCtrl = Keyboard.current[Key.RightCtrl].IsPressed() || Keyboard.current[Key.LeftCtrl].IsPressed();
+            io.KeyAlt = Keyboard.current[Key.RightAlt].IsPressed() || Keyboard.current[Key.LeftAlt].IsPressed();
+            io.KeyShift = Keyboard.current[Key.RightShift].IsPressed() || Keyboard.current[Key.LeftShift].IsPressed();
+            io.KeySuper = Keyboard.current[Key.RightWindows].IsPressed() || Keyboard.current[Key.LeftWindows].IsPressed();
         }
 
         if (vrMouseDebug && vrCamera != null)
@@ -578,7 +571,7 @@ public class ImGuiUnity : MonoBehaviour {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
 
-            Ray ray = vrCamera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = vrCamera.ScreenPointToRay(Vector2.zero);//Input.mousePosition); // TODO reimplement
             Vector2 screenPosition;
             bool mouseOnVRGUI = RaycastVRUI(ray, out screenPosition);
             if (mouseOnVRGUI)
